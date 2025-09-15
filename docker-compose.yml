@@ -13,11 +13,24 @@ services:
       - ./.env
     command: ["node", "backend/backend.js"]
     networks:
-      - nfc_network
+      - $NETWORK_NAME
     deploy:
       restart_policy:
         condition: always
-
+  swagger:
+    build:
+      context: .
+      dockerfile: swagger.Dockerfile
+    container_name: swagger_ui
+    ports:
+      - "3000:3000"
+    networks:
+      - $NETWORK_NAME
+    depends_on:
+      - backend
+    deploy:
+      restart_policy:
+        condition: always
 networks:
-  nfc_network:
+  $NETWORK_NAME:
     external: true

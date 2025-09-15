@@ -6,6 +6,6 @@ RUN npm install
 
 COPY backend/ ./backend
 
-EXPOSE 3000
+EXPOSE 5000
 
 CMD ["node", "backend/backend.js"]

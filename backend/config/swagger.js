@@ -11,8 +11,8 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `localhost:${3000}`, //to determine
-        description: "Dev",
+        url: `"http://backend:5000"`, //to determine
+        description: "Backend API",
       },
     ],
     components: {

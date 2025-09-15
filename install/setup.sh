@@ -59,6 +59,31 @@ NETWORK_NAME=$NETWORK_NAME
 EOL
 echo -e "${GREEN}MySQL .env created at $MYSQL_ENV_FILE${NC}"
 
+
+# ================================
+# Create project .env (nfc_project/.env)
+# ================================
+PROJECT_ENV_FILE="$MAIN_PROJECT_DIR/.env"
+echo -e "${BLUE}Creating project .env in $MAIN_PROJECT_DIR...${NC}"
+cat > "$PROJECT_ENV_FILE" <<EOL
+# Database connection
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=nfc_database
+DB_USER=nfc_user
+DB_PASSWORD=$MYSQL_USER_PASSWORD
+
+# Gmail SMTP
+GMAIL_USER=noreplynfc.imar@gmail.com
+GMAIL_APP_PASSWORD=eqhsvcfvotzcojce
+EOL
+
+# Add to .gitignore if not already
+grep -qxF ".env" "$MAIN_PROJECT_DIR/.gitignore" || echo ".env" >> "$MAIN_PROJECT_DIR/.gitignore"
+echo -e "${GREEN}Project .env created and added to .gitignore${NC}"
+
+
+
 # ================================
 # Docker network
 # ================================

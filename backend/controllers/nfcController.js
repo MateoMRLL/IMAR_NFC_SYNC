@@ -6,7 +6,7 @@ class NfcController {
       const result = await NfcService.scanNfc(req.body);
 
       if (result.status === "new_card") {
-        return res.json({
+        return res.status(200).json({
           success: true,
           message: result.message,
           sync: result.sync_status,
@@ -15,7 +15,7 @@ class NfcController {
       }
 
       if (result.status === "unassigned_card") {
-        return res.json({
+        return res.status(200).json({
           success: false,
           message: result.message,
           sync: result.sync_status,
@@ -23,7 +23,7 @@ class NfcController {
         });
       }
 
-      res.json({
+      res.status(200).json({
         success: true,
         message: result.message,
         sync: result.sync_status,

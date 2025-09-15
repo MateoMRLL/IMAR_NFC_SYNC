@@ -1,5 +1,5 @@
 const swaggerJsdoc = require("swagger-jsdoc");
-const schemas = require("../Docs/schemas");
+const schemas = require("../docs/schemas");
 
 const swaggerOptions = {
   definition: {
@@ -11,7 +11,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `"http://backend:5000"`, //to determine
+        url: `"http://localhost:5000"`,
         description: "Backend API",
       },
     ],
@@ -19,7 +19,7 @@ const swaggerOptions = {
       schemas: schemas,
     },
   },
-  apis: ["./Routes/*.js", "./Docs/*.js"],
+  apis: ["./routes/*.js", "./docs/*.js"],
 };
 
 module.exports = swaggerJsdoc(swaggerOptions);

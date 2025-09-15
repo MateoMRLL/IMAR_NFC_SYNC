@@ -4,7 +4,7 @@ class TagController {
   static async getAllTags(req, res) {
     try {
       const result = await TagService.getAllTags();
-      res.json({
+      res.status(200).json({
         success: true,
         message: "Tags fetched successfully",
         data: result,

@@ -5,7 +5,7 @@ class UserController {
     try {
       const result = await UserService.registerUser(req.body);
 
-      res.json({
+      res.status(200).json({
         success: true,
         message: "User registered successfully",
         data: result,
@@ -23,7 +23,7 @@ class UserController {
     try {
       const result = await UserService.getAllUsers();
 
-      res.json({
+      res.status(200).json({
         success: true,
         message: "Users fetched successfully",
         data: result,
@@ -40,7 +40,7 @@ class UserController {
   static async getOneUser(req, res) {
     try {
       const result = await UserService.getUserFromCloud(req.params.uuid);
-      res.json({
+      res.status(200).json({
         success: true,
         message: "User fetched successfully",
         data: result,

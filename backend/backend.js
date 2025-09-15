@@ -1,5 +1,8 @@
 const express = require("express");
+const swaggerUi = require("swagger-ui-express");
 const cors = require("cors");
+
+const swaggerDocs = require("./config/swagger");
 
 // Import routes
 const userRoute = require("./routes/userRoutes");
@@ -16,6 +19,24 @@ const port = 5000;
 app.use(express.json());
 app.use(cors());
 
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocs, {
+    swaggerOptions: {
+      defaultModelsExpandDepth: -1,
+    },
+  })
+);
+
+app.get("/", (req, res) => {
+  res.json({
+    message: "IMAR NFC API",
+    documentation: `http://localhost:${port}/api-docs`,
+    version: "1.0.0",
+  });
+});
+
 // Mount routes
 app.use("/api/users", userRoute);
 app.use("/api/tags", tagRoute);
@@ -25,4 +46,6 @@ app.use("/api/auth", authRoute);
 
 app.listen(port, () => {
   console.log(`NFC Server running on port ${port}`);
+  console.log(`Documentation Swagger : http://localhost:${port}/api-docs`);
+  console.log(`API Base URL : http://localhost:${port}`);
 });

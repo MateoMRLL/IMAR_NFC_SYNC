@@ -4,7 +4,7 @@ class AuthController {
   static async sendCode(req, res) {
     try {
       const result = await AuthService.generateSendCode(req.body);
-      res.json({
+      res.status(200).json({
         success: result.success,
         message: result.success
           ? "Verification code sent"
@@ -20,7 +20,7 @@ class AuthController {
   static async verifyCode(req, res) {
     try {
       const result = await AuthService.verifyCode(req.body);
-      res.json({
+      res.status(200).json({
         success: result.success,
         message: result.success ? "Code verified" : result.message,
         data: result.data || null,
@@ -34,7 +34,7 @@ class AuthController {
   static async resendCode(req, res) {
     try {
       const result = await AuthService.resendCode(req.body);
-      res.json({
+      res.status(200).json({
         success: result.success,
         message: result.success ? "New verification code sent" : result.message,
         data: result.data || null,

@@ -1,0 +1,36 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    container_name: backend_node
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app/backend
+      - /app/node_modules
+    env_file:
+      - ./.env
+    command: ["node", "backend/backend.js"]
+    networks:
+      - $NETWORK_NAME
+    deploy:
+      restart_policy:
+        condition: always
+  swagger:
+    build:
+      context: .
+      dockerfile: swagger.Dockerfile
+    container_name: swagger_ui
+    ports:
+      - "3000:3000"
+    networks:
+      - $NETWORK_NAME
+    depends_on:
+      - backend
+    deploy:
+      restart_policy:
+        condition: always
+networks:
+  $NETWORK_NAME:
+    external: true

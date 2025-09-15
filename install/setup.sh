@@ -74,7 +74,6 @@ fi
 # ================================
 echo -e "${BLUE}Creating docker-compose.yml in $MYSQL_DIR...${NC}"
 cat > "$COMPOSE_FILE" <<EOL
-version: '3.8'
 
 services:
   mysql:
@@ -114,7 +113,7 @@ cd "$MYSQL_DIR"
 docker compose up -d --build
 
 echo "Waiting for MySQL container to be healthy..."
-MAX_RETRIES=30
+MAX_RETRIES=50
 RETRY=0
 until [ "$(docker inspect -f '{{.State.Health.Status}}' $MYSQL_CONTAINER_NAME)" == "healthy" ]; do
     RETRY=$((RETRY+1))

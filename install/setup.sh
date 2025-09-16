@@ -56,6 +56,7 @@ else
     echo -e "${YELLOW}Docker network $NETWORK_NAME already exists${NC}"
 fi
 
+
 # ================================
 # 4. MySQL Docker setup
 # ================================
@@ -65,6 +66,32 @@ MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
 MYSQL_CONTAINER_NAME=$MYSQL_CONTAINER_NAME
 NETWORK_NAME=$NETWORK_NAME
 EOL
+
+
+# ================================
+# Deleting former container and volume
+# ================================
+
+if docker ps -a --format '{{.Names}}' | grep -q "^$MYSQL_CONTAINER_NAME$"; then
+    echo -e "${YELLOW}Container $MYSQL_CONTAINER_NAME already exists. Stopping and removing...${NC}"
+    cd "$MYSQL_DIR"
+    docker compose down
+
+    # Remove volumes containing "mysql_data"
+    VOLUMES_TO_REMOVE=$(docker volume ls --format '{{.Name}}' | grep "mysql_data" || true)
+    if [ -n "$VOLUMES_TO_REMOVE" ]; then
+        echo -e "${YELLOW}Removing Docker volumes containing 'mysql_data':${NC}"
+        echo "$VOLUMES_TO_REMOVE"
+        for VOL in $VOLUMES_TO_REMOVE; do
+            docker volume rm "$VOL" || true
+        done
+    else
+        echo -e "${GREEN}No volumes containing 'mysql_data' found.${NC}"
+    fi
+else
+    echo -e "${GREEN}No existing container found. Proceeding...${NC}"
+fi
+
 
 cat > "$MYSQL_DIR/docker-compose.yml" <<EOL
 services:

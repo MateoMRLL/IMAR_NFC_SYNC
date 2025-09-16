@@ -57,7 +57,7 @@ cat > "$COMPOSE_MAIN_FILE" <<EOL
 services:
   backend:
     build:
-      context: ./backend
+      context: .
       dockerfile: backend.Dockerfile
     container_name: backend_node
     ports:

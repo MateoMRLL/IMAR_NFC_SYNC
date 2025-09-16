@@ -11,16 +11,19 @@ BLUE="\033[1;34m"
 NC="\033[0m"
 
 # ================================
-# Detect project root
+# Paths
 # ================================
-MAIN_PROJECT_DIR="$(dirname "$(dirname "$(realpath "$0")")")"
-PROJECT_DIR="$MAIN_PROJECT_DIR/mysql-container-folder"
+
+PROJECT_DIR="$(dirname "$(dirname "$(realpath "$0")")")"
+MYSQL_DIR="$(dirname "$PROJECT_DIR")/mysql-container-folder"
+
 MYSQL_CONTAINER_NAME="mysql-container"
 NETWORK_NAME="nfc_network"
 DB_NAME="nfc_database"
 DB_USER="nfc_user"
 
-echo -e "${BLUE}Project root: $MAIN_PROJECT_DIR${NC}"
+echo -e "${BLUE}Project dir: $PROJECT_DIR${NC}"
+echo -e "${BLUE}MySQL dir: $MYSQL_DIR${NC}"
 
 # ================================
 # 1. MySQL passwords
@@ -40,11 +43,6 @@ fi
 # ================================
 # 2. System update
 # ================================
-
-echo -e "${BLUE}=== Time updating ===${NC}"
-sudo timedatectl set-ntp true
-sudo systemctl restart systemd-timesyncd
-
 echo -e "${BLUE}Updating system...${NC}"
 sudo apt update && sudo apt upgrade -y
 
@@ -61,14 +59,14 @@ fi
 # ================================
 # 4. MySQL Docker setup
 # ================================
-mkdir -p "$PROJECT_DIR"
-cat > "$PROJECT_DIR/.env" <<EOL
+mkdir -p "$MYSQL_DIR"
+cat > "$MYSQL_DIR/.env" <<EOL
 MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
 MYSQL_CONTAINER_NAME=$MYSQL_CONTAINER_NAME
 NETWORK_NAME=$NETWORK_NAME
 EOL
 
-cat > "$PROJECT_DIR/docker-compose.yml" <<EOL
+cat > "$MYSQL_DIR/docker-compose.yml" <<EOL
 services:
   mysql:
     image: mysql:latest
@@ -98,7 +96,7 @@ volumes:
   mysql_data:
 EOL
 
-cd "$PROJECT_DIR"
+cd "$MYSQL_DIR"
 docker compose up -d --build
 cd - >/dev/null
 
@@ -123,7 +121,7 @@ fi
 # ================================
 # 6. Project .env
 # ================================
-cat > "$MAIN_PROJECT_DIR/.env" <<EOL
+cat > "$PROJECT_DIR/.env" <<EOL
 DB_HOST=localhost
 DB_PORT=3306
 DB_NAME=$DB_NAME
@@ -134,14 +132,14 @@ GMAIL_USER=noreplynfc.imar@gmail.com
 GMAIL_APP_PASSWORD=eqhsvcfvotzcojce
 EOL
 
-grep -qxF ".env" "$MAIN_PROJECT_DIR/.gitignore" || echo ".env" >> "$MAIN_PROJECT_DIR/.gitignore"
+grep -qxF ".env" "$PROJECT_DIR/.gitignore" || echo ".env" >> "$PROJECT_DIR/.gitignore"
 
 # ================================
 # 7. Node.js and dependencies
 # ================================
 sudo apt install -y nodejs npm
 
-for DIR in "$MAIN_PROJECT_DIR/database" "$MAIN_PROJECT_DIR/backend"; do
+for DIR in "$PROJECT_DIR/database" "$PROJECT_DIR/backend"; do
     if [ -f "$DIR/package.json" ]; then
         echo -e "${BLUE}Installing npm dependencies in $DIR...${NC}"
         cd "$DIR"

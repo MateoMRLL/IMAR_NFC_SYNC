@@ -1,19 +1,29 @@
 #!/bin/bash
 set -e
 
+# ================================
+# Colors
+# ================================
 GREEN="\033[1;32m"
 YELLOW="\033[1;33m"
 RED="\033[1;31m"
 BLUE="\033[1;34m"
 NC="\033[0m"
 
-# Detect project root
-MAIN_PROJECT_DIR="$(dirname "$(dirname "$(realpath "$0")")")"
-PROJECT_DIR="$MAIN_PROJECT_DIR/mysql-container-folder"
+# ================================
+# Paths
+# ================================
+PROJECT_DIR="$(dirname "$(dirname "$(realpath "$0")")")"
+MYSQL_DIR="$(dirname "$PROJECT_DIR")/mysql-container-folder"
+
 MYSQL_CONTAINER_NAME="mysql-container"
 NETWORK_NAME="nfc_network"
 DB_USER="nfc_user"
-MYSQL_USER_PASSWORD=$(grep DB_PASSWORD "$MAIN_PROJECT_DIR/.env" | cut -d'=' -f2)
+
+MYSQL_USER_PASSWORD=$(grep DB_PASSWORD "$PROJECT_DIR/.env" | cut -d'=' -f2)
+
+echo -e "${BLUE}Project dir: $PROJECT_DIR${NC}"
+echo -e "${BLUE}MySQL dir: $MYSQL_DIR${NC}"
 
 # ================================
 # Wait for MySQL
@@ -34,7 +44,7 @@ echo -e "${GREEN}MySQL is ready!${NC}"
 # ================================
 # Init DB
 # ================================
-DATABASE_DIR="$MAIN_PROJECT_DIR/database"
+DATABASE_DIR="$PROJECT_DIR/database"
 if [ -f "$DATABASE_DIR/initDatabase.js" ]; then
     echo -e "${BLUE}Initializing database...${NC}"
     cd "$DATABASE_DIR"
@@ -45,7 +55,7 @@ fi
 # ================================
 # Backend + Swagger
 # ================================
-COMPOSE_MAIN_FILE="$MAIN_PROJECT_DIR/docker-compose.yml"
+COMPOSE_MAIN_FILE="$PROJECT_DIR/docker-compose.yml"
 cat > "$COMPOSE_MAIN_FILE" <<EOL
 services:
   backend:
@@ -66,12 +76,28 @@ services:
     deploy:
       restart_policy:
         condition: always
+
+  swagger:
+    build:
+      context: .
+      dockerfile: swagger.Dockerfile
+    container_name: swagger_ui
+    ports:
+      - "3000:3000"
+    networks:
+      - $NETWORK_NAME
+    depends_on:
+      - backend
+    deploy:
+      restart_policy:
+        condition: always
+
 networks:
   $NETWORK_NAME:
     external: true
 EOL
 
-cd "$MAIN_PROJECT_DIR"
+cd "$PROJECT_DIR"
 docker compose up -d --build
 
 # ================================
@@ -79,4 +105,4 @@ docker compose up -d --build
 # ================================
 echo -e "${GREEN}Services started!${NC}"
 echo "Backend: http://localhost:5000"
-echo "Swagger: http://localhost:5000/docs"
+echo "Swagger: http://localhost:3000/docs"

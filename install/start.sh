@@ -50,14 +50,31 @@ if [ -f "$DATABASE_DIR/initDatabase.js" ]; then
 fi
 
 # ================================
-# Backend + Swagger
+# Backend 
 # ================================
+BACKEND_CONTAINER="backend_node"
+
+if docker ps -a --format '{{.Names}}' | grep -q "^$BACKEND_CONTAINER$"; then
+    echo -e "${YELLOW}Container $BACKEND_CONTAINER already exists. Stopping and removing...${NC}"
+    docker rm -f "$BACKEND_CONTAINER"
+fi
+
+# Remove backend volume if it exists
+BACKEND_VOLUME="backend_data"
+if docker volume ls --format '{{.Name}}' | grep -q "^$BACKEND_VOLUME$"; then
+    echo -e "${YELLOW}Removing volume $BACKEND_VOLUME...${NC}"
+    docker volume rm "$BACKEND_VOLUME" || true
+else
+    echo -e "${GREEN}No backend volume to remove${NC}"
+fi
+
+
 COMPOSE_MAIN_FILE="$PROJECT_DIR/docker-compose.yml"
 cat > "$COMPOSE_MAIN_FILE" <<EOL
 services:
   backend:
     build:
-      context: .
+      context: ./
       dockerfile: backend.Dockerfile
     container_name: backend_node
     ports:

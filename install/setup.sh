@@ -13,7 +13,6 @@ NC="\033[0m"
 # ================================
 # Paths
 # ================================
-
 PROJECT_DIR="$(dirname "$(dirname "$(realpath "$0")")")"
 MYSQL_DIR="$(dirname "$PROJECT_DIR")/mysql-container-folder"
 
@@ -56,44 +55,19 @@ else
     echo -e "${YELLOW}Docker network $NETWORK_NAME already exists${NC}"
 fi
 
-
 # ================================
 # 4. MySQL Docker setup
 # ================================
 mkdir -p "$MYSQL_DIR"
+
+# .env file
 cat > "$MYSQL_DIR/.env" <<EOL
 MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
 MYSQL_CONTAINER_NAME=$MYSQL_CONTAINER_NAME
 NETWORK_NAME=$NETWORK_NAME
 EOL
 
-
-# ================================
-# Deleting former container and volume
-# ================================
-cd "$MYSQL_DIR"
-
-if docker ps -a --format '{{.Names}}' | grep -q "^$MYSQL_CONTAINER_NAME$"; then
-    echo -e "${YELLOW}Container $MYSQL_CONTAINER_NAME already exists. Stopping and removing...${NC}"
-    cd "$MYSQL_DIR"
-    docker compose down
-
-    # Remove volumes containing "mysql_data"
-    VOLUMES_TO_REMOVE=$(docker volume ls --format '{{.Name}}' | grep "mysql_data" || true)
-    if [ -n "$VOLUMES_TO_REMOVE" ]; then
-        echo -e "${YELLOW}Removing Docker volumes containing 'mysql_data':${NC}"
-        echo "$VOLUMES_TO_REMOVE"
-        for VOL in $VOLUMES_TO_REMOVE; do
-            docker volume rm "$VOL" || true
-        done
-    else
-        echo -e "${GREEN}No volumes containing 'mysql_data' found.${NC}"
-    fi
-else
-    echo -e "${GREEN}No existing container found. Proceeding...${NC}"
-fi
-
-
+# docker-compose.yml
 cat > "$MYSQL_DIR/docker-compose.yml" <<EOL
 services:
   mysql:
@@ -124,12 +98,40 @@ volumes:
   mysql_data:
 EOL
 
+# ================================
+# 5. Delete previous container & volumes
+# ================================
 cd "$MYSQL_DIR"
+
+if [ -f "docker-compose.yml" ]; then
+    if docker ps -a --format '{{.Names}}' | grep -q "^$MYSQL_CONTAINER_NAME$"; then
+        echo -e "${YELLOW}Container $MYSQL_CONTAINER_NAME already exists. Stopping and removing...${NC}"
+        docker compose down
+    else
+        echo -e "${GREEN}No existing MySQL container found${NC}"
+    fi
+
+    # Remove volumes containing "mysql_data"
+    VOLUMES_TO_REMOVE=$(docker volume ls --format '{{.Name}}' | grep "mysql_data" || true)
+    if [ -n "$VOLUMES_TO_REMOVE" ]; then
+        echo -e "${YELLOW}Removing Docker volumes containing 'mysql_data':${NC}"
+        for VOL in $VOLUMES_TO_REMOVE; do
+            docker volume rm "$VOL" || true
+        done
+    fi
+else
+    echo -e "${RED}docker-compose.yml not found in $MYSQL_DIR${NC}"
+    exit 1
+fi
+
+# ================================
+# 6. Launch MySQL container
+# ================================
 docker compose up -d --build
 cd - >/dev/null
 
 # ================================
-# 5. Portainer
+# 7. Portainer
 # ================================
 if ! docker ps -a --format '{{.Names}}' | grep -q "^portainer$"; then
     docker volume create portainer_data
@@ -147,7 +149,7 @@ else
 fi
 
 # ================================
-# 6. Project .env
+# 8. Project .env
 # ================================
 cat > "$PROJECT_DIR/.env" <<EOL
 DB_HOST=localhost
@@ -163,7 +165,7 @@ EOL
 grep -qxF ".env" "$PROJECT_DIR/.gitignore" || echo ".env" >> "$PROJECT_DIR/.gitignore"
 
 # ================================
-# 7. Node.js and dependencies
+# 9. Node.js and dependencies
 # ================================
 sudo apt install -y nodejs npm
 
@@ -177,7 +179,7 @@ for DIR in "$PROJECT_DIR/database" "$PROJECT_DIR/backend"; do
 done
 
 # ================================
-# Recap
+# 10. Recap
 # ================================
 echo -e "\n${GREEN}=== Setup completed! ===${NC}"
 echo "MySQL root password: $MYSQL_ROOT_PASSWORD"

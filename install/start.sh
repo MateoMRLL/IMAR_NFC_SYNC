@@ -20,15 +20,15 @@ MYSQL_CONTAINER_NAME="mysql-container"
 NETWORK_NAME="nfc_network"
 DB_USER="nfc_user"
 
+# Get MySQL user password from project .env
 MYSQL_USER_PASSWORD=$(grep DB_PASSWORD "$PROJECT_DIR/.env" | cut -d'=' -f2)
 
 echo -e "${BLUE}Project dir: $PROJECT_DIR${NC}"
 echo -e "${BLUE}MySQL dir: $MYSQL_DIR${NC}"
 
 # ================================
-# Wait for MySQL and Init
+# 1. Wait for MySQL and initialize database
 # ================================
-
 DATABASE_DIR="$PROJECT_DIR/database"
 if [ -f "$DATABASE_DIR/initDatabase.js" ]; then
     echo "Waiting for MySQL to be ready before initializing database..."
@@ -50,17 +50,20 @@ if [ -f "$DATABASE_DIR/initDatabase.js" ]; then
 fi
 
 # ================================
-# Backend 
+# 2. Backend container setup
 # ================================
 BACKEND_CONTAINER="backend_node"
+BACKEND_VOLUME="backend_data"
 
+# Stop and remove container if exists
 if docker ps -a --format '{{.Names}}' | grep -q "^$BACKEND_CONTAINER$"; then
     echo -e "${YELLOW}Container $BACKEND_CONTAINER already exists. Stopping and removing...${NC}"
     docker rm -f "$BACKEND_CONTAINER"
+else
+    echo -e "${GREEN}No existing backend container found${NC}"
 fi
 
-# Remove backend volume if it exists
-BACKEND_VOLUME="backend_data"
+# Remove backend volume if exists
 if docker volume ls --format '{{.Name}}' | grep -q "^$BACKEND_VOLUME$"; then
     echo -e "${YELLOW}Removing volume $BACKEND_VOLUME...${NC}"
     docker volume rm "$BACKEND_VOLUME" || true
@@ -68,14 +71,16 @@ else
     echo -e "${GREEN}No backend volume to remove${NC}"
 fi
 
-
+# ================================
+# 3. Generate docker-compose.yml
+# ================================
 COMPOSE_MAIN_FILE="$PROJECT_DIR/docker-compose.yml"
 cat > "$COMPOSE_MAIN_FILE" <<EOL
 services:
   backend:
     build:
-      context: ./
-      dockerfile: backend.Dockerfile
+      context: .
+      dockerfile: Dockerfile
     container_name: backend_node
     ports:
       - "5000:5000"
@@ -96,11 +101,15 @@ networks:
     external: true
 EOL
 
+# ================================
+# 4. Launch backend container
+# ================================
 cd "$PROJECT_DIR"
 docker compose up -d --build
+cd - >/dev/null
 
 # ================================
-# Recap
+# 5. Recap
 # ================================
 echo -e "${GREEN}Services started!${NC}"
 echo "Backend: http://localhost:5000"

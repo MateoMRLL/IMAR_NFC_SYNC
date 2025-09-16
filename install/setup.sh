@@ -71,6 +71,7 @@ EOL
 # ================================
 # Deleting former container and volume
 # ================================
+cd "$MYSQL_DIR"
 
 if docker ps -a --format '{{.Names}}' | grep -q "^$MYSQL_CONTAINER_NAME$"; then
     echo -e "${YELLOW}Container $MYSQL_CONTAINER_NAME already exists. Stopping and removing...${NC}"

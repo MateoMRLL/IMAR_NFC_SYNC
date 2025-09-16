@@ -26,27 +26,24 @@ echo -e "${BLUE}Project dir: $PROJECT_DIR${NC}"
 echo -e "${BLUE}MySQL dir: $MYSQL_DIR${NC}"
 
 # ================================
-# Wait for MySQL
+# Wait for MySQL and Init
 # ================================
-echo -e "${BLUE}Waiting for MySQL to be ready...${NC}"
-MAX_RETRIES=30
-RETRY=0
-until docker exec "$MYSQL_CONTAINER_NAME" mysqladmin ping -u"$DB_USER" -p"$MYSQL_USER_PASSWORD" --silent &>/dev/null; do
-    RETRY=$((RETRY+1))
-    if [ $RETRY -ge $MAX_RETRIES ]; then
-        echo -e "${RED}MySQL did not become ready. Exiting.${NC}"
-        exit 1
-    fi
-    sleep 2
-done
-echo -e "${GREEN}MySQL is ready!${NC}"
 
-# ================================
-# Init DB
-# ================================
 DATABASE_DIR="$PROJECT_DIR/database"
 if [ -f "$DATABASE_DIR/initDatabase.js" ]; then
-    echo -e "${BLUE}Initializing database...${NC}"
+    echo "Waiting for MySQL to be ready before initializing database..."
+    MAX_RETRIES=30
+    RETRY=0
+    until docker exec "$MYSQL_CONTAINER_NAME" mysqladmin ping -u"$DB_USER" -p"$MYSQL_USER_PASSWORD" --silent &>/dev/null; do
+        RETRY=$((RETRY+1))
+        if [ $RETRY -ge $MAX_RETRIES ]; then
+            echo -e "${RED}MySQL did not become ready in time. Exiting.${NC}"
+            exit 1
+        fi
+        echo "MySQL not ready yet... retrying ($RETRY/$MAX_RETRIES)"
+        sleep 2
+    done
+    echo -e "${GREEN}MySQL is ready. Running database initialization...${NC}"
     cd "$DATABASE_DIR"
     node initDatabase.js
     cd - >/dev/null

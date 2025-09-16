@@ -151,8 +151,10 @@ fi
 # ================================
 # 8. Project .env
 # ================================
+IP=$(hostname -I | awk '{print $1}')
+
 cat > "$PROJECT_DIR/.env" <<EOL
-DB_HOST=localhost
+DB_HOST=$IP
 DB_PORT=3306
 DB_NAME=$DB_NAME
 DB_USER=$DB_USER

@@ -77,21 +77,6 @@ services:
       restart_policy:
         condition: always
 
-  swagger:
-    build:
-      context: .
-      dockerfile: swagger.Dockerfile
-    container_name: swagger_ui
-    ports:
-      - "3000:3000"
-    networks:
-      - $NETWORK_NAME
-    depends_on:
-      - backend
-    deploy:
-      restart_policy:
-        condition: always
-
 networks:
   $NETWORK_NAME:
     external: true
@@ -105,4 +90,4 @@ docker compose up -d --build
 # ================================
 echo -e "${GREEN}Services started!${NC}"
 echo "Backend: http://localhost:5000"
-echo "Swagger: http://localhost:3000/docs"
+echo "Swagger: http://localhost:5000/docs"

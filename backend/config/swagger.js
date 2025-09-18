@@ -2,7 +2,7 @@ const swaggerJsdoc = require("swagger-jsdoc");
 
 const path = require("path");
 const dotenv = require("dotenv");
-dotenv.config({ path: path.join(__dirname, "../../.env") });
+dotenv.config({ path: path.join(__dirname, "../../.mysql_setup.env") });
 const IP = process.env.DB_HOST;
 
 let schemas = {};

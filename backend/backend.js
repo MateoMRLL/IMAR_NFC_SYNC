@@ -3,8 +3,9 @@ const swaggerUi = require("swagger-ui-express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const swaggerDocs = require("./config/swagger");
+const path = require("path");
 
-dotenv.config({ path: path.join(__dirname, "../.env") });
+dotenv.config({ path: path.join(__dirname, "../.mysql_setup.env") });
 const IP = process.env.DB_HOST;
 
 // Import routes

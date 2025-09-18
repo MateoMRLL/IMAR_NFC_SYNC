@@ -1,5 +1,5 @@
-*.env
 node_modules
-notes.txt
 php-server
 docker-compose.yml
+first_version.sh
+project-hierarchy.txt

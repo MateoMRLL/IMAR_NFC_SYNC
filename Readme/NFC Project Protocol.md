@@ -17,6 +17,7 @@ Set up the complete environment for the project so that backend, frontend, and s
 - Ensure you have access to the hardware: computer, Raspberry Pi (RPI), router.
 - Prepare supported OS: Linux or Windows.
 - Install base software if needed: Raspberry Pi OS Imager.
+- SD Reader Card
 
 ---
 

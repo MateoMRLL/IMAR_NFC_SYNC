@@ -33,5 +33,6 @@ lib_deps =
     miguelbalboa/MFRC522@^1.4.12
 ```
 
+- [ ] Make sure to modify Wifi Credentials and IP address
 - [ ] **Build** using the play icon
-- [ ]
+- [ ] **Run** the code

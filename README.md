@@ -1,4 +1,4 @@
-# NFC Projec main README file
+# NFC Project main README file
 
 **Project:** NFC IMAR project  
 **Date:** 2025-09-16  

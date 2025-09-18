@@ -5,6 +5,8 @@
 
 set -e
 
+ENV_FILE=".mysql_setup.env"
+
 # ================================
 # 1. Ask user for network and container
 # ================================
@@ -60,3 +62,19 @@ SQL
 echo -e "\nDatabase '$NEW_DB' and user '$NEW_USER' created successfully!"
 echo "User password: $NEW_PASSWORD"
 echo "Container '$MYSQL_CONTAINER_NAME' is connected to network '$DOCKER_NETWORK_NAME'."
+
+# ================================
+# 5. Store 
+# ================================
+
+
+IP=$(hostname -I | awk '{print $1}')
+
+cat > "$ENV_FILE" <<EOL
+DB_HOST=$IP
+DB_PORT=3306
+DB_NAME=$NEW_DB
+DB_USER=$NEW_USER
+DB_PASS=$NEW_PASSWORD
+
+EOL

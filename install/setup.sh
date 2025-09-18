@@ -26,9 +26,9 @@ BACKEND_DIR="$PROJECT_DIR/backend"
 ENV_FILE_NAME=".mysql_setup.env"
 ENV_FILE_PATH="$BACKEND_DIR/$ENV_FILE_NAME"
 
-if [ -f "$EXEC_DIR/.env" ]; then
+if [ -f "$EXEC_DIR/.mysql_setup.env" ]; then
     echo "Moving .env to backend folder..."
-    mv "$EXEC_DIR/.env" "$ENV_FILE_PATH"
+    mv "$EXEC_DIR/.mysql_setup.env" "$ENV_FILE_PATH"
 else
     echo "No .env found in execution folder. Exiting."
     exit 1

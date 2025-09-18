@@ -2,7 +2,7 @@ const mysql = require("mysql2/promise");
 const path = require("path");
 const dotenv = require("dotenv");
 
-const pathenv = path.join(__dirname, "../.env");
+const pathenv = path.join(__dirname, "../.mysql_setup.env ");
 console.log(pathenv);
 dotenv.config({ path: pathenv });
 

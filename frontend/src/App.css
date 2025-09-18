@@ -1,0 +1,23 @@
+html,
+body {
+  height: 100%;
+  background-color: #f3f4f6;
+}
+
+.app-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center; /* centre verticalement */
+  justify-content: center; /* centre horizontalement */
+  padding: 3rem;
+}
+
+/* Grille de tuiles */
+.tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px; /* limite la largeur max */
+}

@@ -1,0 +1,16 @@
+/* Container principal */
+.linkpage-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #f5f5f5;
+  gap: 2rem;
+}
+
+.home-button-wrapper {
+  margin-bottom: 30px; /* space between button and the tile */
+  align-self: flex-start; /* optional: left-align the button */
+}

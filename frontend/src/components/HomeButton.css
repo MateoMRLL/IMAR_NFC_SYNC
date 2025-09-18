@@ -1,0 +1,123 @@
+/* src/components/HomeButton.css */
+
+.home-button-container {
+  position: absolute;
+  z-index: 1000;
+}
+
+/* Positions */
+.home-button-container.top-left {
+  top: 2rem;
+  left: 2rem;
+}
+
+.home-button-container.top-right {
+  top: 2rem;
+  right: 2rem;
+}
+
+.home-button-container.bottom-left {
+  bottom: 2rem;
+  left: 2rem;
+}
+
+.home-button-container.bottom-right {
+  bottom: 2rem;
+  right: 2rem;
+}
+
+/* Styles du bouton */
+.home-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+/* Variantes du bouton */
+.home-btn.default {
+  background: rgba(255, 255, 255, 0.95);
+  color: #2c3e50;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.home-btn.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.home-btn.dark {
+  background: rgba(44, 62, 80, 0.95);
+  color: white;
+}
+
+.home-btn.glass {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Effets hover */
+.home-btn.default:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.home-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.home-btn.dark:hover {
+  background: rgba(52, 73, 94, 0.95);
+  transform: translateY(-2px);
+}
+
+.home-btn.glass:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Icône */
+.home-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .home-button-container.top-left,
+  .home-button-container.top-right {
+    top: 1rem;
+  }
+
+  .home-button-container.top-left,
+  .home-button-container.bottom-left {
+    left: 1rem;
+  }
+
+  .home-button-container.top-right,
+  .home-button-container.bottom-right {
+    right: 1rem;
+  }
+
+  .home-button-container.bottom-left,
+  .home-button-container.bottom-right {
+    bottom: 1rem;
+  }
+
+  .home-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}

@@ -49,15 +49,6 @@ grep -qxF "backend/$ENV_FILE_NAME" "$PROJECT_DIR/.gitignore" || echo "backend/$E
 # ================================
 sudo apt install -y nodejs npm
 
-for DIR in "$PROJECT_DIR/database" "$PROJECT_DIR/backend"; do
-    if [ -f "$DIR/package.json" ]; then
-        echo -e "${BLUE}Installing npm dependencies in $DIR...${NC}"
-        cd "$DIR"
-        npm install
-        cd - >/dev/null
-    fi
-done
-
 # ================================
 # 6. Recap
 # ================================

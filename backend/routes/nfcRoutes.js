@@ -39,5 +39,5 @@ const router = express.Router();
  */
 
 router.post("/scan", NfcController.scan);
-
+router.post("/logs", NfcController.getLogs);
 module.exports = router;

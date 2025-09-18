@@ -42,6 +42,20 @@ class NfcController {
       res.status(500).json({ error: "Error processing NFC scan" });
     }
   }
+
+   static async getLogs(req, res) {
+    try {
+      const logs = await NfcService.getRecentScans();
+      res.json({
+        success: true,
+        data: logs,
+      });
+    } catch (error) {
+      console.error("Error fetching logs:", error);
+      res.status(500).json({ error: "Failed to fetch logs" });
+    }
+   }
+  
 }
 
 module.exports = NfcController;

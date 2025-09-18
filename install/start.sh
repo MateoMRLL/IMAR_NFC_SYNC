@@ -18,6 +18,19 @@ MYSQL_DIR="$(dirname "$PROJECT_DIR")/mysql-folder"
 BACKEND_DIR="$PROJECT_DIR/backend"
 
 # ================================
+# Install dependencies
+# ================================
+
+for DIR in "$PROJECT_DIR/database" "$PROJECT_DIR/backend"; do
+    if [ -f "$DIR/package.json" ]; then
+        echo -e "${BLUE}Installing npm dependencies in $DIR...${NC}"
+        cd "$DIR"
+        npm install
+        cd - >/dev/null
+    fi
+done
+
+# ================================
 # Load variables from backend/.mysql_setup.env
 # ================================
 ENV_FILE="$BACKEND_DIR/.mysql_setup.env"

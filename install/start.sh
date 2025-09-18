@@ -14,14 +14,20 @@ NC="\033[0m"
 # Paths
 # ================================
 PROJECT_DIR="$(dirname "$(dirname "$(realpath "$0")")")"
-MYSQL_DIR="$(dirname "$PROJECT_DIR")/mysql-container-folder"
+MYSQL_DIR="$(dirname "$PROJECT_DIR")/mysql-folder"
 
-MYSQL_CONTAINER_NAME="mysql-container"
-NETWORK_NAME="nfc_network"
-DB_USER="nfc_user"
+# Load variables from .env
+ENV_FILE="$PROJECT_DIR/.mysql_setup.env"
+if [ ! -f "$ENV_FILE" ]; then
+    echo -e "${RED}Error: .env file not found in project directory ($PROJECT_DIR)${NC}"
+    exit 1
+fi
+export $(grep -v '^#' "$ENV_FILE" | xargs)
 
-# Get MySQL user password from project .env
-MYSQL_USER_PASSWORD=$(grep DB_PASSWORD "$PROJECT_DIR/.env" | cut -d'=' -f2)
+MYSQL_CONTAINER_NAME=${MYSQL_CONTAINER_NAME:-mysql-container}
+NETWORK_NAME=${NETWORK_NAME:-nfc_network}
+DB_USER=${DB_USER:-nfc_user}
+MYSQL_USER_PASSWORD=${DB_PASSWORD}
 
 echo -e "${BLUE}Project dir: $PROJECT_DIR${NC}"
 echo -e "${BLUE}MySQL dir: $MYSQL_DIR${NC}"
@@ -34,10 +40,10 @@ if [ -f "$DATABASE_DIR/initDatabase.js" ]; then
     echo "Waiting for MySQL to be ready..."
     MAX_RETRIES=60
     RETRY=0
-    until docker exec "$MYSQL_CONTAINER_NAME" mysqladmin ping -u"$DB_USER" -p"$DB_PASSWORD" --silent &>/dev/null; do
+    until docker exec "$MYSQL_CONTAINER_NAME" mysqladmin ping -u"$DB_USER" -p"$MYSQL_USER_PASSWORD" --silent &>/dev/null; do
         RETRY=$((RETRY+1))
         if [ $RETRY -ge $MAX_RETRIES ]; then
-            echo -e "MySQL did not become ready in time. Exiting."
+            echo -e "${RED}MySQL did not become ready in time. Exiting.${NC}"
             exit 1
         fi
         echo "MySQL not ready yet... retrying ($RETRY/$MAX_RETRIES)"
@@ -89,7 +95,7 @@ services:
       - ./backend:/app/backend
       - /app/node_modules
     env_file:
-      - ./.env
+      - ./.mysql_setup.env
     command: ["node", "backend/backend.js"]
     networks:
       - $NETWORK_NAME

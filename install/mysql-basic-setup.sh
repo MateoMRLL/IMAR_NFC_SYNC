@@ -11,6 +11,8 @@ ENV_FILE=".mysql_setup.env"
 # 1. Ask user for network and container
 # ================================
 read -p "Enter Docker network name to create/connect: " DOCKER_NETWORK_NAME
+
+# To improve : search 
 read -p "Enter existing MySQL container name: " MYSQL_CONTAINER_NAME
 
 # ================================
@@ -76,5 +78,4 @@ DB_PORT=3306
 DB_NAME=$NEW_DB
 DB_USER=$NEW_USER
 DB_PASS=$NEW_PASSWORD
-
 EOL

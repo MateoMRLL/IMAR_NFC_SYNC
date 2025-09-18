@@ -14,15 +14,20 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Pour users et tags (retourne directement un tableau)
-  const fetchData = async (endpoint, setter) => {
+  // Fetch générique pour récupérer uniquement la partie "cloud" d'un endpoint
+  const fetchCloudData = async (endpoint, setter) => {
     setIsLoading(true);
     setError(null);
+
     try {
       const response = await fetch(`${baseUrl}${endpoint}`);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      const data = await response.json();
-      setter(data || []); // users et tags renvoient un tableau direct
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      // On prend uniquement la partie cloud
+      setter(result.data?.cloud || []);
     } catch (err) {
       setError(err.message);
       setter([]);
@@ -36,7 +41,7 @@ const Dashboard = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${baseUrl}/api/nfc/logs/`);
+      const response = await fetch(`${baseUrl}/api/nfc/logs`);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
       setter(data.data || []); // ici on prend la clé "data"
@@ -52,20 +57,20 @@ const Dashboard = () => {
 
   // Fetch automatique au chargement de la page selon l’onglet actif
   useEffect(() => {
+    console.log("Active tab:", activeTab);
     switch (activeTab) {
       case 'users':
-        fetchData('/api/users/', setUsers);
+        fetchCloudData('/api/users', data => { console.log("Users:", data); setUsers(data); });
         break;
       case 'tags':
-        fetchData('/api/tags/', setTags);
+        fetchCloudData('/api/tags', data => { console.log("Tags:", data); setTags(data); });
         break;
       case 'logs':
-        fetchLogs(setLogs);
-        break;
-      default:
+        fetchLogs(data => { console.log("Logs:", data); setLogs(data); });
         break;
     }
   }, [activeTab]);
+
 
   // Composants pour les cartes
   const UserCard = ({ user }) => (

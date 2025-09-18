@@ -59,7 +59,17 @@ try {
                 respond(false, 'User not found');
             }
             break;
+        case 'tags':
+            $stmt = $pdo->query("SELECT * FROM Tags");
+            $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            respond(true, 'All tags fetched', $tags);
+            break;
 
+        case 'logs':
+            $stmt = $pdo->query("  SELECT l.id, l.scanned_at, l.tag_id, BIN_TO_UUID(l.user_id, 1) AS local_uuid, u.name AS user_name FROM ScanLogs l LEFT JOIN Users u ON l.user_id = u.id ORDER BY l.scanned_at DESC");
+            $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            respond(true, 'All users fetched', $logs);
+            break;
 
         default:
             respond(false, "Unknown resource: $resource");

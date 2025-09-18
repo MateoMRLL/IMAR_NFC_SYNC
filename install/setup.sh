@@ -18,13 +18,17 @@ NC="\033[0m"
 PROJECT_DIR="$(dirname "$(dirname "$(realpath "$0")")")"
 EXEC_DIR="$(pwd)"
 MYSQL_DIR="$(dirname "$PROJECT_DIR")/mysql-folder"
+BACKEND_DIR="$PROJECT_DIR/backend"
 
 # ================================
-# 2. Move .env to PROJECT_DIR
+# 2. Move .env to backend folder
 # ================================
-if [ -f "$EXEC_DIR/.mysql_setup.env" ]; then
-    echo "Moving .env to project directory..."
-    mv "$EXEC_DIR/.mysql_setup.env" "$PROJECT_DIR/.mysql_setup.env"
+ENV_FILE_NAME=".mysql_setup.env"
+ENV_FILE_PATH="$BACKEND_DIR/$ENV_FILE_NAME"
+
+if [ -f "$EXEC_DIR/.env" ]; then
+    echo "Moving .env to backend folder..."
+    mv "$EXEC_DIR/.env" "$ENV_FILE_PATH"
 else
     echo "No .env found in execution folder. Exiting."
     exit 1
@@ -33,12 +37,12 @@ fi
 # ================================
 # 3. Load environment variables
 # ================================
-export $(grep -v '^#' "$PROJECT_DIR/.mysql_setup.env" | xargs)
+export $(grep -v '^#' "$ENV_FILE_PATH" | xargs)
 
 # ================================
 # 4. Update .gitignore
 # ================================
-grep -qxF ".mysql_setup.env" "$PROJECT_DIR/.gitignore" || echo ".mysql_setup.env" >> "$PROJECT_DIR/.gitignore"
+grep -qxF "backend/$ENV_FILE_NAME" "$PROJECT_DIR/.gitignore" || echo "backend/$ENV_FILE_NAME" >> "$PROJECT_DIR/.gitignore"
 
 # ================================
 # 5. Install Node.js and dependencies

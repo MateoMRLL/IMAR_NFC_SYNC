@@ -62,5 +62,4 @@ done
 # 6. Recap
 # ================================
 echo -e "\n${GREEN}=== Setup completed! ===${NC}"
-echo "MySQL $DB_USER password: $MYSQL_USER_PASSWORD"
 echo -e "\nRun ${YELLOW}./install/start.sh${NC} to initialize DB and start services."

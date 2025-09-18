@@ -1,6 +1,7 @@
 const express = require("express");
 const swaggerUi = require("swagger-ui-express");
 const cors = require("cors");
+const dotenv = require("dotenv");
 const swaggerDocs = require("./config/swagger");
 
 dotenv.config({ path: path.join(__dirname, "../.env") });

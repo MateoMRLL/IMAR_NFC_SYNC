@@ -14,4 +14,4 @@ jobs:
       - name: Run backend setup script
         run: |
           chmod +x ./install/start_without_db_init.sh
-          ./scripts/setup_backend.sh
+          ./install/start_without_db_init.sh

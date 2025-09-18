@@ -15,11 +15,14 @@ NC="\033[0m"
 # ================================
 PROJECT_DIR="$(dirname "$(dirname "$(realpath "$0")")")"
 MYSQL_DIR="$(dirname "$PROJECT_DIR")/mysql-folder"
+BACKEND_DIR="$PROJECT_DIR/backend"
 
-# Load variables from .env
-ENV_FILE="$PROJECT_DIR/.mysql_setup.env"
+# ================================
+# Load variables from backend/.mysql_setup.env
+# ================================
+ENV_FILE="$BACKEND_DIR/.mysql_setup.env"
 if [ ! -f "$ENV_FILE" ]; then
-    echo -e "${RED}Error: .env file not found in project directory ($PROJECT_DIR)${NC}"
+    echo -e "${RED}Error: .env file not found in backend folder ($ENV_FILE)${NC}"
     exit 1
 fi
 export $(grep -v '^#' "$ENV_FILE" | xargs)
@@ -95,7 +98,7 @@ services:
       - ./backend:/app/backend
       - /app/node_modules
     env_file:
-      - ./.mysql_setup.env
+      - ./backend/.mysql_setup.env
     command: ["node", "backend/backend.js"]
     networks:
       - $NETWORK_NAME
@@ -119,5 +122,5 @@ cd - >/dev/null
 # 5. Recap
 # ================================
 echo -e "${GREEN}Services started!${NC}"
-echo "Backend: http://localhost:5000"
-echo "Swagger: http://localhost:5000/docs"
+echo "Backend: http://$DB_HOST:5000"
+echo "Swagger: http://$DB_HOST:5000/docs"

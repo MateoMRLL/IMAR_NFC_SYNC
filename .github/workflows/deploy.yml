@@ -1,0 +1,17 @@
+name: Deploy on Raspberry Pi
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run backend setup script
+        run: |
+          chmod +x ./scripts/setup_backend.sh
+          ./scripts/setup_backend.sh

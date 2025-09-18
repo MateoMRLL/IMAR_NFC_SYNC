@@ -1,5 +1,5 @@
 #!/bin/bash
-# Universal Docker installer for Raspberry Pi and Debian x86_64
+# Universal Docker installer (with Portainer) for Raspberry Pi and Debian x86_64
 # Matéo MARILL
 
 set -e
@@ -12,7 +12,7 @@ BLUE="\033[1;34m"
 NC="\033[0m"
 
 echo -e "${BLUE}=== Updating system ===${NC}"
-sudo apt update && sudo apt upgrade -y
+sudo apt update -y
 
 echo -e "${BLUE}=== Installing prerequisites ===${NC}"
 sudo apt install -y curl git apt-transport-https ca-certificates gnupg lsb-release 
@@ -41,6 +41,25 @@ groups $USER
 echo -e "${BLUE}=== Enabling and starting Docker service ===${NC}"
 sudo systemctl enable docker
 sudo systemctl start docker
+
+# ================================
+# 7. Portainer
+# ================================
+if ! docker ps -a --format '{{.Names}}' | grep -q "^portainer$"; then
+    docker volume create portainer_data
+    docker run -d \
+        -p 9000:9443 \
+        -p 8000:8000 \
+        --name portainer \
+        --restart=always \
+        -v /var/run/docker.sock:/var/run/docker.sock \
+        -v portainer_data:/data \
+        portainer/portainer-ce:latest
+    echo -e "${GREEN}Portainer installed (http://<YOUR_SERVER_IP>:9000)${NC}"
+else
+    echo -e "${YELLOW}Portainer already running, skipping${NC}"
+fi
+
 
 echo -e "${BLUE}=== Reboot to make changes work ===${NC}"
 sudo reboot

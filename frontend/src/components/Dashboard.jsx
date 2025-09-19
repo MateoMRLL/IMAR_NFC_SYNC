@@ -36,15 +36,14 @@ const Dashboard = () => {
     }
   };
 
-  // Pour logs (retourne { success, data: [...] })
   const fetchLogs = async (setter) => {
     setIsLoading(true);
     setError(null);
     try {
       const response = await fetch(`${baseUrl}/api/nfc/logs`);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      const data = await response.json();
-      setter(data.data || []); // ici on prend la clé "data"
+      const result = await response.json();
+      setter((result.data?.cloud || []).filter(log => log.name));
     } catch (err) {
       setError(err.message);
       setter([]);
@@ -118,7 +117,7 @@ const Dashboard = () => {
         </div>
         <div className="card-row">
           <Hash className="icon gray" size={16} />
-          <span>User Name : {log.user_name}</span>
+          <span>User Name : {log.name}</span>
         </div>
         <div className="card-row">
           <Clock className="icon gray" size={16} />

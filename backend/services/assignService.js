@@ -67,9 +67,12 @@ async function unassignTag(tagId) {
   return await AssignModel.deleteAssignment(tagId);
 }
 
-async function isTagAssigned(tag_id) {
-  const tagAssignment = await AssignModel.findAssignmentByTagId(tag_id);
-  return !!tagAssignment;
+async function isTagAssigned(tagData) {
+  if (!tagData.nfc_uid) {
+    throw new Error("Missing required field");
+  }
+  const existing = await AssignModel.findAssignmentByTagId(tagRecord.uid);
+  return !!existing;
 }
 
 module.exports = {

@@ -1,4 +1,7 @@
 #!/bin/bash
+# Create local DB given the .env file created thanks to the mysql-basic-setup.sh script and creates Docker container for the backend
+# Matéo MARILL
+
 set -e
 
 # ================================

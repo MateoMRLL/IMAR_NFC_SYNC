@@ -38,5 +38,6 @@ const assignController = require("../controllers/assignController");
  */
 
 router.post("/", assignController.assignTag);
+router.post("/check", assignController.checkAssignment);
 
 module.exports = router;

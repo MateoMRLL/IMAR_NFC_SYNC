@@ -1,4 +1,10 @@
 #!/bin/bash
+# Just deploy given the .env file 
+# Matéo MARILL
+
+# TODO make sure that the .env file is not pushed
+
+
 set -e
 
 # ================================

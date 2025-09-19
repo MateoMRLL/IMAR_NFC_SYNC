@@ -3,6 +3,7 @@ const AssignModel = require("../models/assignModel");
 const UserModel = require("../models/userModel");
 const ScanLogModel = require("../models/logsModel");
 const { forwardToPHP } = require("../utils/dataSender");
+const { fetchFromPHP } = require("../utils/dataGetter");
 
 async function scanNfc(scanData) {
   const { nfc_uid } = scanData;

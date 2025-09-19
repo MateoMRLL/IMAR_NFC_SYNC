@@ -1,11 +1,10 @@
 const UserModel = require("../models/userModel");
-const TagModel = require("../models/tagModel");
 const { fetchFromPHP } = require("../utils/dataGetter");
 const { forwardToPHP } = require("../utils/dataSender");
-const { getLastsync, updateLastsync } = require("../models/syncModel");
+const SyncModel = require("../models/syncModel");
 
 async function syncUsersWithCloud() {
-  const lastSync = await getLastsync("users");
+  const lastSync = await SyncModel.getLastsync("users");
   console.log("Last sync timestamp:", lastSync);
 
   const cloudUsers = await fetchFromPHP("users", { updated_after: lastSync });
@@ -57,11 +56,10 @@ async function syncUsersWithCloud() {
     if (!localMap[cloudUser.local_uuid]) {
       console.log(`Inserting new user from cloud: ${cloudUser.local_uuid}`);
       await UserModel.upsertUser(cloudUser.local_uuid, cloudUser);
-      await UserModel.updateSyncStatus(cloudUser.local_uuid, "sync");
       inserted++;
     }
   }
-
+  await SyncModel.updateLastsync("users");
   console.log(
     `Sync complete: ${updated} updated, ${deleted} deleted, ${inserted} inserted`
   );

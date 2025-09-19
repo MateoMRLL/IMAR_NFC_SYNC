@@ -30,6 +30,6 @@ function updateLastsync(tableName) {
 }
 
 module.exports = {
- getLastsync,
- updateLastsync, 
+  getLastsync,
+  updateLastsync,
 };

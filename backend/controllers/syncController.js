@@ -22,44 +22,25 @@ class SyncController {
   }
 
   /**
-   * Synchronise uniquement les utilisateurs
+   * Sync Users
    */
   static async syncUsers(req, res) {
     try {
       await SyncService.syncUsers();
       res.status(200).json({
         success: true,
-        message: "Synchronisation des utilisateurs terminée.",
+        message: "Sync Users done",
       });
     } catch (error) {
       console.error("Error in syncUsers:", error);
       res.status(500).json({
         success: false,
-        error: "Erreur lors de la synchronisation des utilisateurs.",
+        error: "Err while syncing Users.",
         details: error.message,
       });
     }
   }
 
-  /**
-   * Synchronise uniquement les tags
-   */
-  static async syncTags(req, res) {
-    try {
-      await SyncService.syncTags();
-      res.status(200).json({
-        success: true,
-        message: "Synchronisation des tags terminée.",
-      });
-    } catch (error) {
-      console.error("Error in syncTags:", error);
-      res.status(500).json({
-        success: false,
-        error: "Erreur lors de la synchronisation des tags.",
-        details: error.message,
-      });
-    }
-  }
 }
 
 module.exports = SyncController;

@@ -224,5 +224,5 @@ module.exports = {
   updateCloudId,
   updateSyncStatus,
   deleteUserByUuid,
-  upsertandcleanUser,
+  upsertAndCleanUser,
 };

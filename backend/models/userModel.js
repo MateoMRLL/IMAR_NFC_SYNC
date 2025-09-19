@@ -172,7 +172,6 @@ function upsertAndCleanUser(cloudUsers) {
     const cloudMap = {};
     usersArray.forEach(u => {
       if (u.local_uuid) cloudMap[u.local_uuid] = u;
-      console.log("u: ", u);
     });
 
     db.query("SELECT id, cloud_id FROM Users", (err, localUsers) => {
@@ -182,7 +181,9 @@ function upsertAndCleanUser(cloudUsers) {
       let deleted = 0;
 
       const promises = localUsers.map(local => {
-        const cloudUser = cloudMap[local.id]; // on utilise l'id tel quel
+        const cloudUser = cloudMap[local.id];
+        console.log("cloudUser", cloudUser);
+
         if (cloudUser) {
           const sql = `
             UPDATE Users
@@ -198,7 +199,7 @@ function upsertAndCleanUser(cloudUsers) {
             });
           });
         } else {
-          const sql = "DELETE FROM Users WHERE id = UUID_TO_BIN(?,1)";
+          const sql = "DELETE FROM Users WHERE id = ?";
           return new Promise((res, rej) => {
             db.query(sql, [local.id], (err) => {
               if (err) return rej(err);
@@ -216,10 +217,6 @@ function upsertAndCleanUser(cloudUsers) {
   });
 }
 
-
-
-   
-  
 module.exports = {
   getUsers,
   getUserByUuid,

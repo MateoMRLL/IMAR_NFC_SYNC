@@ -88,10 +88,10 @@ async function scanNfc(scanData) {
 
 async function getRecentScans() {
   try {
-    
+
     const [localScans, cloudScans] = await Promise.all([
       ScanLogModel.getRecentLogs(),
-      fetchFromPHP("scans"),
+      fetchFromPHP("logs"),
     ]);
 
     return {

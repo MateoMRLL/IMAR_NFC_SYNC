@@ -166,8 +166,10 @@ function upsertAndCleanUser(cloudUsers) {
   return new Promise((resolve, reject) => {
     if (!cloudUsers) return resolve({ updated: 0, deleted: 0 });
 
+    const usersArray = Array.isArray(cloudUsers) ? cloudUsers : [cloudUsers];
+
     const cloudMap = {};
-    cloudUsers.forEach(u => {
+    usersArray.forEach(u => {
       if (u.local_uuid) cloudMap[u.local_uuid] = u;
     });
 

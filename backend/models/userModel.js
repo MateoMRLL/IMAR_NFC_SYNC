@@ -161,15 +161,22 @@ function getUserByEmail(email) {
     });
   });
 }
-function upsertAndCleanUser(cloudUsers) {
-  console.log("test", cloudUsers);
-  const cloudUsersJSON = JSON.parse(cloudUsers);
-  console.log("test2", cloudUsersJSON)
-  return new Promise((resolve, reject) => {
-    if (!cloudUsers || cloudUsers.length === 0) return resolve({ updated: 0, deleted: 0 });
+function upsertAndCleanUser(cloudUsersJSON) {
+  let cloudUsers;
+  try {
+    cloudUsers = JSON.parse(cloudUsersJSON);
+  } catch (err) {
+    return Promise.reject(new Error("Invalid JSON input"));
+  }
 
+  const usersArray = Array.isArray(cloudUsers) ? cloudUsers : [cloudUsers];
+
+  return new Promise((resolve, reject) => {
+    if (!usersArray || usersArray.length === 0) return resolve({ updated: 0, deleted: 0 });
+
+    // Crée un lookup par local_uuid
     const cloudMap = {};
-    cloudUsers.forEach(u => {
+    usersArray.forEach(u => {
       if (u.local_uuid) cloudMap[u.local_uuid] = u;
     });
 
@@ -180,7 +187,7 @@ function upsertAndCleanUser(cloudUsers) {
       let deleted = 0;
 
       const promises = localUsers.map(local => {
-        const cloudUser = cloudMap[local.id];
+        const cloudUser = cloudMap[local.id]; // on utilise l'id tel quel
         if (cloudUser) {
           const sql = `
             UPDATE Users

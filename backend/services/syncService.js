@@ -4,7 +4,11 @@ const { fetchFromPHP } = require("../utils/dataGetter");
 const { forwardToPHP } = require("../utils/dataSender");
 const { getLastsync, updateLastsync } = require("../models/syncModel");
 
-async function syncUsersWithCloud(cloudUsers) {
+async function syncUsersWithCloud() {
+  const lastSync = await getLastsync("users");
+  console.log("lastSync :", lastSync);
+  const cloudUsers = await fetchFromPHP("users", { updated_after: lastSync });
+
   if (!cloudUsers || cloudUsers.length === 0) {
     console.log("No users to synchronize");
     return { updated: 0, deleted: 0 };

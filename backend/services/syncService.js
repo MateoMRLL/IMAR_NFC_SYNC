@@ -59,7 +59,8 @@ async function syncUsersWithCloud() {
       inserted++;
     }
   }
-  await SyncModel.updateLastSync("users");
+
+  await SyncModel.updateLastsync("users");
   console.log(
     `Sync complete: ${updated} updated, ${deleted} deleted, ${inserted} inserted`
   );
@@ -123,7 +124,7 @@ async function syncTagsWithCloud() {
   }
 
   // Update the last sync timestamp
-  await SyncModel.updateLastSync("tags");
+  await SyncModel.updateLastsync("tags");
 
   console.log(
     `Tag sync complete: ${updated} updated, ${deleted} deleted, ${inserted} inserted`

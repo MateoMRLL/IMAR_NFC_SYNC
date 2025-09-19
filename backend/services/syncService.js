@@ -57,6 +57,7 @@ async function syncUsersWithCloud() {
     if (!localMap[cloudUser.local_uuid]) {
       console.log(`Inserting new user from cloud: ${cloudUser.local_uuid}`);
       await UserModel.upsertUser(cloudUser.local_uuid, cloudUser);
+      await UserModel.updateSyncStatus(cloudUser.local_uuid, "sync");
       inserted++;
     }
   }

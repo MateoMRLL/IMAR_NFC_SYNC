@@ -26,7 +26,7 @@ class SyncController {
    */
   static async syncUsers(req, res) {
     try {
-      await SyncService.syncUsers();
+      await SyncService.syncUsersWithCloud();
       res.status(200).json({
         success: true,
         message: "Sync Users done",
@@ -40,8 +40,6 @@ class SyncController {
       });
     }
   }
- 
- 
 }
 
 module.exports = SyncController;

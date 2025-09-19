@@ -13,8 +13,9 @@ async function syncUsers() {
       return;
     }
 
-    for (const user of cloudUsers) {
-      await UserModel.upsertandcleanUsers(user);
+   for (const user of cloudUsers) {
+    console.log(user);
+      await UserModel.upsertandcleanUser(user);
     }
 
     //await updateLastSync("Users");

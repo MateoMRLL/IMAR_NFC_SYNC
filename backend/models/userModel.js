@@ -162,13 +162,13 @@ function getUserByEmail(email) {
   });
 }
 
-function upsertandcleanUsers(cloudUsers) {
+function upsertandcleanUser(cloudUser) {
   return new Promise((resolve, reject) => {
-    if (!cloudUsers) return resolve({ updated: 0, deleted: 0 });
+    if (!cloudUser) return resolve({ updated: 0, deleted: 0 });
 
     // Créer un dictionnaire pour lookup rapide par cloud_id
     const cloudMap = {};
-    cloudUsers.forEach(u => {
+    cloudUser.forEach(u => {
       if (u.cloud_id) cloudMap[u.id] = u; // id = local_uuid
     });
 
@@ -227,5 +227,5 @@ module.exports = {
   updateCloudId,
   updateSyncStatus,
   deleteUserByUuid,
-  upsertandcleanUsers,
+  upsertandcleanUser,
 };

@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 const path = require("path");
 const dotenv = require("dotenv");
 
-dotenv.config({ path: path.join(__dirname, "../../mailer.env") });
+dotenv.config({ path: path.join(__dirname, "../../.mail.env") });
 
 // Configuration
 const transporter = nodemailer.createTransport({
@@ -12,6 +12,9 @@ const transporter = nodemailer.createTransport({
     pass: process.env.GMAIL_APP_PASSWORD, // Gmail app password
   },
 });
+
+console.log(process.env.GMAIL_USER);
+
 
 // 6-digit verification code
 const generateVerificationCode = () => {

@@ -164,6 +164,8 @@ function getUserByEmail(email) {
 function upsertAndCleanUser(cloudUsersJSON) {
   let cloudUsers;
   try {
+    console.log( typeof cloudUsersJSON);
+
     cloudUsers = JSON.parse(cloudUsersJSON);
   } catch (err) {
     return Promise.reject(new Error("Invalid JSON input"));

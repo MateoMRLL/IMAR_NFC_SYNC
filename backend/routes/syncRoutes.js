@@ -3,5 +3,5 @@ const SyncController = require("../controllers/syncController");
 
 const router = express.Router();
 
-router.post("/users", SyncController.syncUsers);
+router.post("/users", SyncController.syncUsersWithCloud);
 module.exports = router;

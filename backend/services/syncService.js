@@ -124,6 +124,7 @@ async function syncTagsWithCloud() {
 
   // Update the last sync timestamp
   await SyncModel.updateLastSync("tags");
+
   console.log(
     `Tag sync complete: ${updated} updated, ${deleted} deleted, ${inserted} inserted`
   );

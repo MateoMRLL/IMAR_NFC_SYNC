@@ -49,27 +49,26 @@ function deleteTagByUid(uid) {
     });
   });
 }
-function upsertTagByUid(uid, tagData) {
+function upsertTagByUid(uid, tagData = {}) {
   return new Promise((resolve, reject) => {
     const sql = `
       INSERT INTO Tags (
-        uid, sync_status, synced_at, created_at
+        uid, sync_status, synced_at, created_at, updated_at
       )
       VALUES (
-        ?,'synced', NOW(), NOW(),
+        ?, 'synced', NOW(), NOW(), NOW()
       )
       ON DUPLICATE KEY UPDATE
         sync_status = 'synced',
         synced_at = NOW(),
+        updated_at = NOW()
     `;
 
-    const values = [
-      uid.toUpperCase(), // uid
-    ];
+    const values = [uid.toUpperCase()];
 
     db.query(sql, values, (err, result) => {
       if (err) return reject(err);
-      resolve(result);
+      resolve(result); // result.affectedRows can indicate insert/update
     });
   });
 }

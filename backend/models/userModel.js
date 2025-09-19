@@ -161,20 +161,25 @@ function getUserByEmail(email) {
     });
   });
 }
-
-function updateLocalUser(local_uuid, cloudData) {
+function upsertUser(local_uuid, cloudData) {
   return new Promise((resolve, reject) => {
     const sql = `
-      UPDATE Users
-      SET name = ?, email = ?, cloud_id = UUID_TO_BIN(?,1), updated_at = NOW()
-      WHERE id = UUID_TO_BIN(?, 1)
+      INSERT INTO Users (id, name, email, cloud_id, updated_at)
+      VALUES (UUID_TO_BIN(?,1), ?, ?, UUID_TO_BIN(?,1), NOW())
+      ON DUPLICATE KEY UPDATE
+        name = VALUES(name),
+        email = VALUES(email),
+        cloud_id = VALUES(cloud_id),
+        updated_at = NOW()
     `;
+
     const values = [
-      cloudData.name,
-      cloudData.email,
-      cloudData.cloud_uuid,
-      local_uuid,
+      local_uuid, // id
+      cloudData.name, // name
+      cloudData.email, // email
+      cloudData.cloud_uuid, // cloud_id
     ];
+
     db.query(sql, values, (err, result) => {
       if (err) return reject(err);
       resolve(result);
@@ -191,5 +196,5 @@ module.exports = {
   updateCloudId,
   updateSyncStatus,
   deleteUserByUuid,
-  updateLocalUser,
+  upsertUser,
 };

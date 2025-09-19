@@ -24,7 +24,7 @@ async function syncUsersWithCloud(cloudUsers) {
     const cloudUser = cloudMap[local.local_uuid];
 
     if (cloudUser) {
-      await UserModel.updateLocalUser(local.local_uuid, cloudUser);
+      await UserModel.upsertUser(local.local_uuid, cloudUser);
       updated++;
     } else {
       await UserModel.deleteLocalUser(local.local_uuid);

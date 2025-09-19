@@ -59,7 +59,7 @@ async function syncUsersWithCloud() {
       inserted++;
     }
   }
-  await SyncModel.updateLastsync("users");
+  await SyncModel.updateLastSync("users");
   console.log(
     `Sync complete: ${updated} updated, ${deleted} deleted, ${inserted} inserted`
   );

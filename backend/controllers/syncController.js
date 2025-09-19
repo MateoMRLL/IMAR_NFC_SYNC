@@ -40,7 +40,8 @@ class SyncController {
       });
     }
   }
-
+ 
+ 
 }
 
 module.exports = SyncController;

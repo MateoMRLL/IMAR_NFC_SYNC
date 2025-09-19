@@ -8,15 +8,14 @@ async function syncUsers() {
   try {
     const lastSync = await getLastsync("users");
     const cloudUsers = await fetchFromPHP("users", { updated_after: lastSync });
-   console.log(cloudUsers);
     if (!cloudUsers || cloudUsers.length === 0) {
       console.log("No users to synchronize");
       return;
     }
 
-    // for (const user of cloudUsers) {
-    //   await UserModel.upsertUser(user);
-    // }
+    for (const user of cloudUsers) {
+      await UserModel.upsertandcleanUsers(user);
+    }
 
     //await updateLastSync("Users");
     console.log(`Sync OK: ${cloudUsers.length} users`);

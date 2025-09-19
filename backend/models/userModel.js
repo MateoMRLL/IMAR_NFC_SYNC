@@ -164,12 +164,18 @@ function getUserByEmail(email) {
 function upsertUser(local_uuid, cloudData) {
   return new Promise((resolve, reject) => {
     const sql = `
-      INSERT INTO Users (id, name, email, cloud_id, updated_at)
-      VALUES (UUID_TO_BIN(?,1), ?, ?, UUID_TO_BIN(?,1), NOW())
+      INSERT INTO Users (
+        id, name, email, cloud_id, sync_status, synced_at, created_at, updated_at
+      )
+      VALUES (
+        UUID_TO_BIN(?,1), ?, ?, UUID_TO_BIN(?,1), 'synced', NOW(), NOW(), NOW()
+      )
       ON DUPLICATE KEY UPDATE
         name = VALUES(name),
         email = VALUES(email),
         cloud_id = VALUES(cloud_id),
+        sync_status = 'synced',
+        synced_at = NOW(),
         updated_at = NOW()
     `;
 

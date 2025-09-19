@@ -68,7 +68,7 @@ async function syncUsersWithCloud() {
 }
 async function syncTagsWithCloud() {
   // Get the timestamp of the last synchronization
-  const lastSync = await SyncModel.getLastSync("tags");
+  const lastSync = await SyncModel.getLastsync("tags");
   console.log("Last sync timestamp:", lastSync);
 
   // Fetch updated tags from the cloud
@@ -124,7 +124,7 @@ async function syncTagsWithCloud() {
   }
 
   // Update the last sync timestamp
-  await SyncModel.updateLastSync("tags");
+  await SyncModel.getLastsync("tags");
   console.log(
     `Tag sync complete: ${updated} updated, ${deleted} deleted, ${inserted} inserted`
   );

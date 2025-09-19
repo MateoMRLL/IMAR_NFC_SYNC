@@ -2,3 +2,4 @@ node_modules
 php-server
 docker-compose.yml
 project-hierarchy.txt
+database/createDatabase.js

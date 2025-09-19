@@ -72,6 +72,16 @@ async function createMinimalTables() {
   `;
     await connection.execute(createScanLogsSQL);
     console.log(' Table "ScanLogs" created');
+    
+    
+    const createLastSyncSQL = `
+      CREATE TABLE IF NOT EXISTS Sync (
+        table_name VARCHAR(100) PRIMARY KEY,
+        last_sync DATETIME
+  );
+  `;
+    await connection.execute(createLastSyncSQL);
+    console.log(' Table "Sync" created');
 
     const [tables] = await connection.execute("SHOW TABLES");
     console.log("\n Tables in database:");

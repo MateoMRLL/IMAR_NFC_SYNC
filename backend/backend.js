@@ -13,8 +13,8 @@ const userRoute = require("./routes/userRoutes");
 const tagRoute = require("./routes/tagRoutes");
 const nfcRoute = require("./routes/nfcRoutes");
 const authRoute = require("./routes/authRoutes");
-
 const assignRoute = require("./routes/assignRoutes");
+const syncRoute = require("./routes/syncRoutes");
 
 const app = express();
 const port = 5000;
@@ -47,6 +47,7 @@ app.use("/api/tags", tagRoute);
 app.use("/api/nfc", nfcRoute);
 app.use("/api/assign", assignRoute);
 app.use("/api/auth", authRoute);
+app.use("/api/sync", syncRoute);
 
 app.listen(port, () => {
   console.log(`NFC Server running on port ${port}`);

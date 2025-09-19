@@ -68,7 +68,7 @@ async function unassignTag(tagId) {
 }
 
 async function isTagAssigned(tagData) {
-  if (!tagData.nfc_uid) {
+  if (!tagData.tag_id) {
     throw new Error("Missing required field");
   }
   const existing = await AssignModel.findAssignmentByTagId(tagRecord.uid);

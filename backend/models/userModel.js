@@ -142,7 +142,7 @@ function deleteUserByUuid(local_uuid) {
   });
 }
 
-function upsertandcleanUsers(email) {
+function getUserByEmail(email) {
   return new Promise((resolve, reject) => {
     const sql = `
       SELECT 
@@ -161,7 +161,8 @@ function upsertandcleanUsers(email) {
     });
   });
 }
-function syncLocalUsersWithCloud(cloudUsers) {
+
+function upsertandcleanUsers(cloudUsers) {
   return new Promise((resolve, reject) => {
     if (!cloudUsers) return resolve({ updated: 0, deleted: 0 });
 
@@ -213,6 +214,9 @@ function syncLocalUsersWithCloud(cloudUsers) {
     });
   });
 }
+
+
+   
   
 module.exports = {
   getUsers,

@@ -9,13 +9,13 @@ class SyncController {
       await SyncService.syncAll();
       res.status(200).json({
         success: true,
-        message: "Toutes les ressources ont été synchronisées avec succès.",
+        message: "Sync successful",
       });
     } catch (error) {
       console.error("Error in syncAll:", error);
       res.status(500).json({
         success: false,
-        error: "Erreur lors de la synchronisation.",
+        error: "Error syncing.",
         details: error.message,
       });
     }

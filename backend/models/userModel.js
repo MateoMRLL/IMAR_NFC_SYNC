@@ -161,26 +161,17 @@ function getUserByEmail(email) {
     });
   });
 }
-function upsertAndCleanUser(cloudUsersJSON) {
-  let cloudUsers;
-  try {
-    console.log( typeof cloudUsersJSON);
 
-    cloudUsers = JSON.parse(cloudUsersJSON);
-  } catch (err) {
-    return Promise.reject(new Error("Invalid JSON input"));
-  }
-
-  const usersArray = Array.isArray(cloudUsers) ? cloudUsers : [cloudUsers];
-
+function upsertAndCleanUser(cloudUsers) {
   return new Promise((resolve, reject) => {
-    if (!usersArray || usersArray.length === 0) return resolve({ updated: 0, deleted: 0 });
+    if (!cloudUsers) return resolve({ updated: 0, deleted: 0 });
 
-    // Crée un lookup par local_uuid
     const cloudMap = {};
-    usersArray.forEach(u => {
+    cloudUsers.forEach(u => {
       if (u.local_uuid) cloudMap[u.local_uuid] = u;
     });
+
+    console.log(cloudMap);
 
     db.query("SELECT id, cloud_id FROM Users", (err, localUsers) => {
       if (err) return reject(err);
@@ -221,8 +212,8 @@ function upsertAndCleanUser(cloudUsersJSON) {
         .catch(reject);
     });
   });
-
 }
+
 
 
    

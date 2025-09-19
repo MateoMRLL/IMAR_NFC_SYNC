@@ -68,7 +68,7 @@ async function unassignTag(tagId) {
 }
 
 async function isTagAssigned(tagData) {
-  if (!tagData.tag_id) {
+  if (!tagData.tagId) {
     throw new Error("Missing required field");
   }
   const existing = await AssignModel.findAssignmentByTagId(tagRecord.uid);

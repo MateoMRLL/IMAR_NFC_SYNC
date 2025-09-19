@@ -53,15 +53,14 @@ function upsertTagByUid(uid, tagData) {
   return new Promise((resolve, reject) => {
     const sql = `
       INSERT INTO Tags (
-        uid, sync_status, synced_at, created_at, updated_at
+        uid, sync_status, synced_at, created_at
       )
       VALUES (
-        ?,'synced', NOW(), NOW(), NOW()
+        ?,'synced', NOW(), NOW()
       )
       ON DUPLICATE KEY UPDATE
         sync_status = 'synced',
         synced_at = NOW(),
-        updated_at = NOW()
     `;
 
     const values = [

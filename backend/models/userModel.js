@@ -161,58 +161,55 @@ function getUserByEmail(email) {
     });
   });
 }
-
-function upsertandcleanUser(cloudUser) {
+function upsertAndCleanUser(cloudUsers) {
   return new Promise((resolve, reject) => {
-    if (!cloudUser) return resolve({ updated: 0, deleted: 0 });
+    if (!cloudUsers || cloudUsers.length === 0) return resolve({ updated: 0, deleted: 0 });
 
-    // Créer un dictionnaire pour lookup rapide par cloud_id
     const cloudMap = {};
-    cloudUser.forEach(u => {
-      if (u.cloud_id) cloudMap[u.id] = u; // id = local_uuid
+    cloudUsers.forEach(u => {
+      if (u.local_uuid) cloudMap[u.local_uuid] = u;
     });
 
-    // Récupérer tous les utilisateurs locaux
     db.query("SELECT id, cloud_id FROM Users", (err, localUsers) => {
       if (err) return reject(err);
 
       let updated = 0;
       let deleted = 0;
-      let completed = 0;
 
-      if (localUsers.length === 0) return resolve({ updated, deleted });
-
-      localUsers.forEach(local => {
+      const promises = localUsers.map(local => {
         const cloudUser = cloudMap[local.id];
-
         if (cloudUser) {
-          // Mettre à jour les champs
           const sql = `
             UPDATE Users
             SET name = ?, email = ?, cloud_id = UUID_TO_BIN(?,1), updated_at = NOW()
             WHERE id = UUID_TO_BIN(?,1)
           `;
-          const values = [cloudUser.name, cloudUser.email, cloudUser.cloud_id, local.id];
-
-          db.query(sql, values, (err) => {
-            if (err) return reject(err);
-            updated++;
-            completed++;
-            if (completed === localUsers.length) resolve({ updated, deleted });
+          const values = [cloudUser.name, cloudUser.email, cloudUser.cloud_uuid, local.id];
+          return new Promise((res, rej) => {
+            db.query(sql, values, (err) => {
+              if (err) return rej(err);
+              updated++;
+              res();
+            });
           });
         } else {
-          // Supprimer l'utilisateur local absent dans le cloud
           const sql = "DELETE FROM Users WHERE id = UUID_TO_BIN(?,1)";
-          db.query(sql, [local.id], (err) => {
-            if (err) return reject(err);
-            deleted++;
-            completed++;
-            if (completed === localUsers.length) resolve({ updated, deleted });
+          return new Promise((res, rej) => {
+            db.query(sql, [local.id], (err) => {
+              if (err) return rej(err);
+              deleted++;
+              res();
+            });
           });
         }
       });
+
+      Promise.all(promises)
+        .then(() => resolve({ updated, deleted }))
+        .catch(reject);
     });
   });
+
 }
 
 

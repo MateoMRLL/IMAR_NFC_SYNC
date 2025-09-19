@@ -40,8 +40,45 @@ function addTag(uid) {
   });
 }
 
+function deleteTagByUid(uid) {
+  return new Promise((resolve, reject) => {
+    const sql = "DELETE FROM Tags WHERE uid = ?";
+    db.query(sql, [uid.toUpperCase()], (err, data) => {
+      if (err) reject(err);
+      else resolve(data[0]);
+    });
+  });
+}
+function upsertTagByUid(uid, tagData) {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      INSERT INTO Tags (
+        uid, sync_status, synced_at, created_at, updated_at
+      )
+      VALUES (
+        ?,'synced', NOW(), NOW(), NOW()
+      )
+      ON DUPLICATE KEY UPDATE
+        sync_status = 'synced',
+        synced_at = NOW(),
+        updated_at = NOW()
+    `;
+
+    const values = [
+      uid.toUpperCase(), // uid
+    ];
+
+    db.query(sql, values, (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+}
+
 module.exports = {
   getTagByUid,
   addTag,
   getAllTags,
+  deleteTagByUid,
+  upsertTagByUid,
 };

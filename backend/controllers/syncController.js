@@ -40,6 +40,23 @@ class SyncController {
       });
     }
   }
+
+  static async syncTags(req, res) {
+    try {
+      await SyncService.syncTagsWithCloud();
+      res.status(200).json({
+        success: true,
+        message: "Sync Tags done",
+      });
+    } catch (error) {
+      console.error("Error in syncTags:", error);
+      res.status(500).json({
+        success: false,
+        error: "Err while syncing Tags.",
+        details: error.message,
+      });
+    }
+  }
 }
 
 module.exports = SyncController;

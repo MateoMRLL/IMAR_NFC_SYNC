@@ -20,6 +20,8 @@ async function createMinimalTables() {
       CREATE TABLE IF NOT EXISTS Tags (
         uid VARCHAR(32) PRIMARY KEY,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        sync_status ENUM('pending', 'synced', 'failed') DEFAULT 'pending',
+        synced_at TIMESTAMP NULL DEFAULT NULL,
       );`;
     await connection.execute(createTagsSQL);
     console.log(' Table "Tags" created');
@@ -48,6 +50,8 @@ async function createMinimalTables() {
         tag_id VARCHAR(32) NOT NULL,
         user_id BINARY(16) NOT NULL,
         assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        sync_status ENUM('pending', 'synced', 'failed') DEFAULT 'pending',
+        synced_at TIMESTAMP NULL DEFAULT NULL,
 
         PRIMARY KEY (tag_id, user_id),
         FOREIGN KEY (tag_id) REFERENCES Tags(uid) ON DELETE CASCADE,
@@ -72,8 +76,7 @@ async function createMinimalTables() {
   `;
     await connection.execute(createScanLogsSQL);
     console.log(' Table "ScanLogs" created');
-    
-    
+
     const createLastSyncSQL = `
       CREATE TABLE IF NOT EXISTS Sync (
         table_name VARCHAR(100) PRIMARY KEY,

@@ -94,12 +94,12 @@ export default function LinkAccountForm() {
     return;
    }
 
-   const assignRes = await fetch(`${API_URL}/api/assign`, {
+   const assignRes = await fetch(`${API_URL}/api/assign/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
      email: formData.email,
-     tagId: formData.nfcUid,
+     nfc_uid: formData.nfcUid,
     }),
    });
 

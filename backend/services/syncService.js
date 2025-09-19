@@ -2,11 +2,11 @@ const UserModel = require("../models/userModel");
 const TagModel = require("../models/tagModel");
 const { fetchFromPHP } = require("../utils/dataGetter");
 const { forwardToPHP } = require("../utils/dataSender");
-const { getLastSync, updateLastSync } = require("../models/syncModel");
+const { getLastsync, updateLastsync } = require("../models/syncModel");
 
 async function syncUsers() {
   try {
-    const lastSync = await getLastSync("users");
+    const lastSync = await getLastsync("users");
     const cloudUsers = await fetchFromPHP("users", { updated_after: lastSync });
    console.log(cloudUsers);
     if (!cloudUsers || cloudUsers.length === 0) {

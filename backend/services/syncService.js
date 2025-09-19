@@ -1,7 +1,6 @@
 const UserModel = require("../models/userModel");
 const TagModel = require("../models/tagModel");
 const { fetchFromPHP } = require("../utils/dataGetter");
-const { forwardToPHP } = require("../utils/dataSender");
 const SyncModel = require("../models/syncModel");
 
 async function syncUsersWithCloud() {
@@ -68,7 +67,7 @@ async function syncUsersWithCloud() {
 }
 async function syncTagsWithCloud() {
   // Get the timestamp of the last synchronization
-  const lastSync = await SyncModel.getLastsync("tags");
+  const lastSync = await SyncModel.getLastsync("users");
   console.log("Last sync timestamp:", lastSync);
 
   // Fetch updated tags from the cloud
@@ -94,7 +93,7 @@ async function syncTagsWithCloud() {
   let deleted = 0;
   let inserted = 0;
 
-  // 1) Update or delete local tags
+  //Update or delete local tags
   for (const local of localTags) {
     const cloudTag = cloudMap[local.uid];
 
@@ -109,7 +108,7 @@ async function syncTagsWithCloud() {
     }
   }
 
-  // 2) Insert cloud tags that do not exist locally
+  //  Insert cloud tags that do not exist locally
   const localMap = {};
   localTags.forEach((t) => {
     if (t.uid) localMap[t.uid] = t;
@@ -124,7 +123,7 @@ async function syncTagsWithCloud() {
   }
 
   // Update the last sync timestamp
-  await SyncModel.getLastsync("tags");
+  await SyncModel.updateLastSync("tags");
   console.log(
     `Tag sync complete: ${updated} updated, ${deleted} deleted, ${inserted} inserted`
   );
@@ -132,9 +131,8 @@ async function syncTagsWithCloud() {
   return { updated, deleted, inserted };
 }
 
-/**
- * Synchronisation globale (toutes les entités)
- */
+//Global Sync
+
 async function syncAll() {
   await syncUsersWithCloud();
   await syncTagsWithCloud();

@@ -50,9 +50,6 @@ async function createMinimalTables() {
         tag_id VARCHAR(32) NOT NULL,
         user_id BINARY(16) NOT NULL,
         assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        sync_status ENUM('pending', 'synced', 'failed') DEFAULT 'pending',
-        synced_at TIMESTAMP NULL DEFAULT NULL,
-
         PRIMARY KEY (tag_id, user_id),
         FOREIGN KEY (tag_id) REFERENCES Tags(uid) ON DELETE CASCADE,
         FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE

@@ -187,7 +187,7 @@ function upsertAndCleanUser(cloudUsers) {
           const sql = `
             UPDATE Users
             SET name = ?, email = ?, cloud_id = UUID_TO_BIN(?,1), updated_at = NOW()
-            WHERE id = UUID_TO_BIN(?,1)
+            WHERE id = ?
           `;
           const values = [cloudUser.name, cloudUser.email, cloudUser.cloud_uuid, local.id];
           return new Promise((res, rej) => {

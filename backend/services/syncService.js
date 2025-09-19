@@ -36,6 +36,5 @@ async function syncAll() {
 
 module.exports = {
   syncUsers,
-  syncTags,
   syncAll,
 };

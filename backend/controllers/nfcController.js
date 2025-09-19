@@ -55,7 +55,6 @@ class NfcController {
       res.status(500).json({ error: "Failed to fetch logs" });
     }
    }
-  
 }
 
 module.exports = NfcController;

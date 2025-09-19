@@ -87,8 +87,26 @@ async function scanNfc(scanData) {
 }
 
 async function getRecentScans() {
-  return await ScanLogModel.getRecentLogs();
+  try {
+    
+    const [localScans, cloudScans] = await Promise.all([
+      ScanLogModel.getRecentLogs(),
+      fetchFromPHP("scans"),
+    ]);
+
+    return {
+      local: localScans,
+      cloud: cloudScans,
+    };
+  } catch (err) {
+    console.error("Fetching recent scans failed:", err.message);
+    return {
+      local: [],
+      cloud: [],
+    };
+  }
 }
+
 
 module.exports = {
   scanNfc,

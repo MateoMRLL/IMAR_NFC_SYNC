@@ -163,7 +163,7 @@ function getUserByEmail(email) {
 }
 function upsertAndCleanUser(cloudUsers) {
   console.log("test", cloudUsers);
-  const cloudUsersJSON = JSON.parse(jsonFromPhp);
+  const cloudUsersJSON = JSON.parse(cloudUsers);
   console.log("test2", cloudUsersJSON)
   return new Promise((resolve, reject) => {
     if (!cloudUsers || cloudUsers.length === 0) return resolve({ updated: 0, deleted: 0 });

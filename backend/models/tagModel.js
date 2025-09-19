@@ -56,7 +56,7 @@ function upsertTagByUid(uid, tagData = {}) {
         uid, sync_status, synced_at, created_at
       )
       VALUES (
-        ?, 'synced', NOW(), NOW(), NOW()
+        ?, 'synced', NOW(), NOW()
       )
       ON DUPLICATE KEY UPDATE
         sync_status = 'synced',

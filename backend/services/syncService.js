@@ -15,7 +15,7 @@ async function syncUsers() {
 
    for (const user of cloudUsers) {
     console.log(user);
-      await UserModel.upsertandcleanUser(user);
+      await UserModel.upsertAndCleanUser(user);
     }
 
     //await updateLastSync("Users");

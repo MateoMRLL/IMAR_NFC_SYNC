@@ -167,13 +167,13 @@ function upsertAndCleanUser(cloudUsers) {
     if (!cloudUsers) return resolve({ updated: 0, deleted: 0 });
 
     const usersArray = Array.isArray(cloudUsers) ? cloudUsers : [cloudUsers];
+    console.log(usersArray)
 
     const cloudMap = {};
     usersArray.forEach(u => {
       if (u.local_uuid) cloudMap[u.local_uuid] = u;
+      console.log("u: ", u);
     });
-
-    console.log(cloudMap);
 
     db.query("SELECT id, cloud_id FROM Users", (err, localUsers) => {
       if (err) return reject(err);

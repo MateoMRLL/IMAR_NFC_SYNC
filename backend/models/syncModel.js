@@ -1,6 +1,5 @@
 const db = require("../config/database");
 
-
 function getLastsync(tableName) {
   return new Promise((resolve, reject) => {
     const sql = `SELECT last_sync FROM Sync WHERE table_name = ?`;
@@ -32,5 +31,5 @@ function updateLastsync(tableName) {
 
 module.exports = {
  getLastsync,
- updatelastSync, 
+ updateLastsync, 
 };

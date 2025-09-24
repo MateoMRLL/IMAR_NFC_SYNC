@@ -26,6 +26,15 @@ function HomePage()
         "shield-check",
         "admin.php"
     );
+    
+   echo MainTile(
+        "Link Account",
+        "Link your account to your NFC tag",
+        "Link",
+        "link",
+        "link.php"
+    );
+    
 
     echo '</div>';
 }

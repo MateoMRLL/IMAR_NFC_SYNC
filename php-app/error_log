@@ -1,0 +1,29 @@
+[23-Sep-2025 23:35:20 Europe/Dublin] PHP Fatal error:  Uncaught mysqli_sql_exception: No database selected in /home/i601543/public_html/nfc_project/register.php:32
+Stack trace:
+#0 /home/i601543/public_html/nfc_project/register.php(32): mysqli->prepare()
+#1 {main}
+  thrown in /home/i601543/public_html/nfc_project/register.php on line 32
+[23-Sep-2025 23:36:28 Europe/Dublin] PHP Fatal error:  Uncaught mysqli_sql_exception: No database selected in /home/i601543/public_html/nfc_project/register.php:32
+Stack trace:
+#0 /home/i601543/public_html/nfc_project/register.php(32): mysqli->prepare()
+#1 {main}
+  thrown in /home/i601543/public_html/nfc_project/register.php on line 32
+[23-Sep-2025 23:37:16 Europe/Dublin] PHP Fatal error:  Uncaught mysqli_sql_exception: No database selected in /home/i601543/public_html/nfc_project/register.php:32
+Stack trace:
+#0 /home/i601543/public_html/nfc_project/register.php(32): mysqli->prepare()
+#1 {main}
+  thrown in /home/i601543/public_html/nfc_project/register.php on line 32
+[23-Sep-2025 23:41:12 Europe/Dublin] PHP Fatal error:  Uncaught mysqli_sql_exception: No database selected in /home/i601543/public_html/nfc_project/register.php:32
+Stack trace:
+#0 /home/i601543/public_html/nfc_project/register.php(32): mysqli->prepare()
+#1 {main}
+  thrown in /home/i601543/public_html/nfc_project/register.php on line 32
+[23-Sep-2025 23:52:58 Europe/Dublin] PHP Fatal error:  Uncaught mysqli_sql_exception: No database selected in /home/i601543/public_html/nfc_project/register.php:32
+Stack trace:
+#0 /home/i601543/public_html/nfc_project/register.php(32): mysqli->prepare()
+#1 {main}
+  thrown in /home/i601543/public_html/nfc_project/register.php on line 32
+[24-Sep-2025 00:01:52 Europe/Dublin] PHP Warning:  include(components/home-button.php): Failed to open stream: No such file or directory in /home/i601543/public_html/nfc_project/admin.php on line 163
+[24-Sep-2025 00:01:52 Europe/Dublin] PHP Warning:  include(): Failed opening 'components/home-button.php' for inclusion (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/i601543/public_html/nfc_project/admin.php on line 163
+[24-Sep-2025 00:19:20 Europe/Dublin] PHP Warning:  include(components/home-button.php): Failed to open stream: No such file or directory in /home/i601543/public_html/nfc_project/admin.php on line 163
+[24-Sep-2025 00:19:20 Europe/Dublin] PHP Warning:  include(): Failed opening 'components/home-button.php' for inclusion (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/i601543/public_html/nfc_project/admin.php on line 163

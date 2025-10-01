@@ -1,9 +1,6 @@
 #!/bin/bash
-# Just deploy given the .env file 
+# Just deploy given the .env file
 # Matéo MARILL
-
-# TODO make sure that the .env file is not pushed
-
 
 set -e
 
@@ -28,12 +25,12 @@ BACKEND_DIR="$PROJECT_DIR/backend"
 # ================================
 
 for DIR in "$PROJECT_DIR/database" "$PROJECT_DIR/backend"; do
-    if [ -f "$DIR/package.json" ]; then
-        echo -e "${BLUE}Installing npm dependencies in $DIR...${NC}"
-        cd "$DIR"
-        npm install
-        cd - >/dev/null
-    fi
+	if [ -f "$DIR/package.json" ]; then
+		echo -e "${BLUE}Installing npm dependencies in $DIR...${NC}"
+		cd "$DIR"
+		npm install
+		cd - >/dev/null
+	fi
 done
 
 # ================================
@@ -41,8 +38,8 @@ done
 # ================================
 ENV_FILE="$BACKEND_DIR/.mysql_setup.env"
 if [ ! -f "$ENV_FILE" ]; then
-    echo -e "${RED}Error: .env file not found in backend folder ($ENV_FILE)${NC}"
-    exit 1
+	echo -e "${RED}Error: .env file not found in backend folder ($ENV_FILE)${NC}"
+	exit 1
 fi
 export $(grep -v '^#' "$ENV_FILE" | xargs)
 
@@ -62,25 +59,25 @@ BACKEND_VOLUME="backend_data"
 
 # Stop and remove container if exists
 if docker ps -a --format '{{.Names}}' | grep -q "^$BACKEND_CONTAINER$"; then
-    echo -e "${YELLOW}Container $BACKEND_CONTAINER already exists. Stopping and removing...${NC}"
-    docker rm -f "$BACKEND_CONTAINER"
+	echo -e "${YELLOW}Container $BACKEND_CONTAINER already exists. Stopping and removing...${NC}"
+	docker rm -f "$BACKEND_CONTAINER"
 else
-    echo -e "${GREEN}No existing backend container found${NC}"
+	echo -e "${GREEN}No existing backend container found${NC}"
 fi
 
 # Remove backend volume if exists
 if docker volume ls --format '{{.Name}}' | grep -q "^$BACKEND_VOLUME$"; then
-    echo -e "${YELLOW}Removing volume $BACKEND_VOLUME...${NC}"
-    docker volume rm "$BACKEND_VOLUME" || true
+	echo -e "${YELLOW}Removing volume $BACKEND_VOLUME...${NC}"
+	docker volume rm "$BACKEND_VOLUME" || true
 else
-    echo -e "${GREEN}No backend volume to remove${NC}"
+	echo -e "${GREEN}No backend volume to remove${NC}"
 fi
 
 # ================================
 # 3. Generate docker-compose.yml
 # ================================
 COMPOSE_MAIN_FILE="$PROJECT_DIR/docker-compose.yml"
-cat > "$COMPOSE_MAIN_FILE" <<EOL
+cat >"$COMPOSE_MAIN_FILE" <<EOL
 services:
   backend:
     build:

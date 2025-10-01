@@ -68,35 +68,49 @@ Set up the complete environment for the project so that backend, frontend, and s
 - [ ] Go to install folder and give execution permission:
   - ```bash
     cd IMAR_NFC_SYNC/install
-    chmod +x docker-installer.sh setup.sh start.sh
+    chmod +x 1_docker-installer.sh 2_mysql_installer.sh 3_mysql_basic_setup.sh 4_project_setup.sh
     ```
-- [ ] Run `docker-installer.sh` :
+- [ ] Run `1_docker-installer.sh` :
   - ```bash
-      ./docker-installer.sh
+      sudo ./docker-installer.sh
     ```
-    This script allows you to check dependencies and install Docker. This script is independant and it's working on Debian system. It should be working on other distros.
+    This script allows you to check dependencies and install Docker (and Portainer at the end). This script is independant and it's working on Debian system. It should be working on other distros.
   - Don't do anything, it takes some times depending on your internet connection.
-  - This script finishes with a reboot !
-- [ ] Run `setup.sh` (if there is a problem or you are loosing connection don't hesitate to run it again) :
+  - This script finishes with a reboot ! You need to launch it using sudo because otherwise it will not add the user into the group.
+- [ ] Run `2_mysql_installer.sh` (if there is a problem or you are loosing connection don't hesitate to run it again) :
   - ```bash
-    ./setup.sh
+    ./2_mysql_installer.sh
     ```
     This script allows you to :
-    - Set up **Root MySQL Password** , **User MySQL Password**
+    - Set up **Root MySQL Password**,
     - Create .env file for MySQL
-    - Create Docker network
     - Remove former container or volume associated with MySQL
     - Create a Docker container for MySQL
-    - Create a Docker container for Portainer to manager Docker containers, follow [Portainer Setup](Portainer%20Setup.md) after the end of the script
-    - Create .env file for the project and add it to the .gitignore file (in case)
-    - Install NodeJS and npm
-    - Install packages in the _database_ file and _backend_ file
-- [ ] Run `start.sh` :
+- [ ] Run `3_mysql_basic_setup.sh` :
   - ```bash
-     ./start.sh
+     ./3_mysql_basic_setup.sh
     ```
     This script allows you to :
-    - Create the local database (due the actual configuration of the project)
-    - Create the backend container in the same Docker network (after checking it's not already up)
+    - Create a Docker network (**nfc_network**)
+    - Link it to the container previously created (**mysql-container**)
+    - Enter your root password
+    - Write the name of the database (**nfc**), the user (**nfc_user**), the user password.
+
+At the end of this 3 steps, you will have a **.mysql_setup.env** file in the install folder. It contains, the database host, name, user and password. In the folder **mysql_folder** there is a .env file containing root password and container name.
+
+- [ ] Run `4_project_setup.sh` :
+  - ```bash
+     ./4_project_setup.sh
+    ```
+    This script allows you to :
+    - Move the .env files to the good place (in the database folder and backend folder)
+    - Install dependencies
+- [ ] Run `5_start_with_db_init.sh` or `5.5_start_without_db_init.sh` depending on the installation process :
+  - ```bash
+     ./5_start_with_db_init.sh
+    ```
+    This script allows you to :
+    - Init the database (or not if 5.5)
+    - Start the backend server
 
 ---

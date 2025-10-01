@@ -52,7 +52,7 @@ Set up the complete environment for the project so that backend, frontend, and s
   sudo apt install git -y
   ```
 - [ ] SSH Setup:
-  - Get the RPI local IP address using `http://192.168.100.1`if you are on this wifi network. If you are using your own wifi connection just make sure to have Raspberry Pi IP local address.
+  - Get the RPI local IP address using `http://192.168.100.1`if you are on this wifi network. If you are using your own wifi connection just make sure to have Raspberry Pi IP local address (ex : your own Wifi network).
   - On your computer use your terminal and `ssh RPI_USER@RPI_IP` and login using `RPI_PASS`
   - type yes
   - then you can add your public SSH Key to the RPI (if you have never set up SSH, follow [SSH](SSH.md))

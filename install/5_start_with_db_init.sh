@@ -25,12 +25,12 @@ BACKEND_DIR="$PROJECT_DIR/backend"
 # ================================
 
 for DIR in "$PROJECT_DIR/database" "$PROJECT_DIR/backend"; do
-    if [ -f "$DIR/package.json" ]; then
-        echo -e "${BLUE}Installing npm dependencies in $DIR...${NC}"
-        cd "$DIR"
-        npm install
-        cd - >/dev/null
-    fi
+	if [ -f "$DIR/package.json" ]; then
+		echo -e "${BLUE}Installing npm dependencies in $DIR...${NC}"
+		cd "$DIR"
+		npm install
+		cd - >/dev/null
+	fi
 done
 
 # ================================
@@ -38,8 +38,8 @@ done
 # ================================
 ENV_FILE="$BACKEND_DIR/.mysql_setup.env"
 if [ ! -f "$ENV_FILE" ]; then
-    echo -e "${RED}Error: .env file not found in backend folder ($ENV_FILE)${NC}"
-    exit 1
+	echo -e "${RED}Error: .env file not found in backend folder ($ENV_FILE)${NC}"
+	exit 1
 fi
 export $(grep -v '^#' "$ENV_FILE" | xargs)
 
@@ -56,23 +56,23 @@ echo -e "${BLUE}MySQL dir: $MYSQL_DIR${NC}"
 # ================================
 DATABASE_DIR="$PROJECT_DIR/database"
 if [ -f "$DATABASE_DIR/initDatabase.js" ]; then
-    echo "Waiting for MySQL to be ready..."
-    MAX_RETRIES=60
-    RETRY=0
-    until docker exec "$MYSQL_CONTAINER_NAME" mysqladmin ping -u"$DB_USER" -p"$MYSQL_USER_PASSWORD" --silent &>/dev/null; do
-        RETRY=$((RETRY+1))
-        if [ $RETRY -ge $MAX_RETRIES ]; then
-            echo -e "${RED}MySQL did not become ready in time. Exiting.${NC}"
-            exit 1
-        fi
-        echo "MySQL not ready yet... retrying ($RETRY/$MAX_RETRIES)"
-        sleep 2
-    done
-    echo "MySQL is ready. Initializing database..."
-    sleep 5
-    cd "$DATABASE_DIR"
-    node initDatabase.js
-    cd - >/dev/null
+	echo "Waiting for MySQL to be ready..."
+	MAX_RETRIES=60
+	RETRY=0
+	until docker exec "$MYSQL_CONTAINER_NAME" mysqladmin ping -u"$DB_USER" -p"$MYSQL_USER_PASSWORD" --silent &>/dev/null; do
+		RETRY=$((RETRY + 1))
+		if [ $RETRY -ge $MAX_RETRIES ]; then
+			echo -e "${RED}MySQL did not become ready in time. Exiting.${NC}"
+			exit 1
+		fi
+		echo "MySQL not ready yet... retrying ($RETRY/$MAX_RETRIES)"
+		sleep 2
+	done
+	echo "MySQL is ready. Initializing database..."
+	sleep 5
+	cd "$DATABASE_DIR"
+	node initDatabase.js
+	cd - >/dev/null
 fi
 
 # ================================
@@ -83,25 +83,25 @@ BACKEND_VOLUME="backend_data"
 
 # Stop and remove container if exists
 if docker ps -a --format '{{.Names}}' | grep -q "^$BACKEND_CONTAINER$"; then
-    echo -e "${YELLOW}Container $BACKEND_CONTAINER already exists. Stopping and removing...${NC}"
-    docker rm -f "$BACKEND_CONTAINER"
+	echo -e "${YELLOW}Container $BACKEND_CONTAINER already exists. Stopping and removing...${NC}"
+	docker rm -f "$BACKEND_CONTAINER"
 else
-    echo -e "${GREEN}No existing backend container found${NC}"
+	echo -e "${GREEN}No existing backend container found${NC}"
 fi
 
 # Remove backend volume if exists
 if docker volume ls --format '{{.Name}}' | grep -q "^$BACKEND_VOLUME$"; then
-    echo -e "${YELLOW}Removing volume $BACKEND_VOLUME...${NC}"
-    docker volume rm "$BACKEND_VOLUME" || true
+	echo -e "${YELLOW}Removing volume $BACKEND_VOLUME...${NC}"
+	docker volume rm "$BACKEND_VOLUME" || true
 else
-    echo -e "${GREEN}No backend volume to remove${NC}"
+	echo -e "${GREEN}No backend volume to remove${NC}"
 fi
 
 # ================================
 # 3. Generate docker-compose.yml
 # ================================
 COMPOSE_MAIN_FILE="$PROJECT_DIR/docker-compose.yml"
-cat > "$COMPOSE_MAIN_FILE" <<EOL
+cat >"$COMPOSE_MAIN_FILE" <<EOL
 services:
   backend:
     build:

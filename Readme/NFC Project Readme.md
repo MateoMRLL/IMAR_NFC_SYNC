@@ -125,7 +125,7 @@ The current system works as follows:
 **Why it’s bad:**
 
 - Increases complexity with dual IDs and synchronization logic.
-- Risk of desynchronization if cloud sync fails or is delayed.
+- Risk of desynchronization if cloud sync fails or is delayed (update : there is a special route http://IP:5000/api/sync/all made for syncing data from Cloud to local).
 
 ### Creating Cloud Database
 

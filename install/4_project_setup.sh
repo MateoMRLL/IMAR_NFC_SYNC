@@ -27,11 +27,11 @@ ENV_FILE_NAME=".mysql_setup.env"
 ENV_FILE_PATH="$BACKEND_DIR/$ENV_FILE_NAME"
 
 if [ -f "$EXEC_DIR/.mysql_setup.env" ]; then
-    echo "Moving .env to backend folder..."
-    mv "$EXEC_DIR/.mysql_setup.env" "$ENV_FILE_PATH"
+	echo "Moving .env to backend folder..."
+	mv "$EXEC_DIR/.mysql_setup.env" "$ENV_FILE_PATH"
 else
-    echo "No .env found in execution folder. Exiting."
-    exit 1
+	echo "No .env found in execution folder. Exiting."
+	exit 1
 fi
 
 # ================================
@@ -42,7 +42,7 @@ export $(grep -v '^#' "$ENV_FILE_PATH" | xargs)
 # ================================
 # 4. Update .gitignore
 # ================================
-grep -qxF "backend/$ENV_FILE_NAME" "$PROJECT_DIR/.gitignore" || echo "backend/$ENV_FILE_NAME" >> "$PROJECT_DIR/.gitignore"
+grep -qxF "backend/$ENV_FILE_NAME" "$PROJECT_DIR/.gitignore" || echo "backend/$ENV_FILE_NAME" >>"$PROJECT_DIR/.gitignore"
 
 # ================================
 # 5. Install Node.js and dependencies
@@ -53,4 +53,4 @@ sudo apt install -y nodejs npm
 # 6. Recap
 # ================================
 echo -e "\n${GREEN}=== Setup completed! ===${NC}"
-echo -e "\nRun ${YELLOW}./install/start.sh${NC} to initialize DB and start services."
+echo -e "\nRun ${YELLOW}./install/5_start_with_db_init.sh${NC} to initialize DB and start services."

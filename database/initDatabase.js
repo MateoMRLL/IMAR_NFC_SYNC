@@ -19,7 +19,7 @@ async function createMinimalTables() {
     const createTagsSQL = `
       CREATE TABLE IF NOT EXISTS Tags (
         uid VARCHAR(32) PRIMARY KEY,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         sync_status ENUM('pending', 'synced', 'failed') DEFAULT 'pending',
         synced_at TIMESTAMP NULL DEFAULT NULL
       );`;

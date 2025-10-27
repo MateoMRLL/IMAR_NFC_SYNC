@@ -68,7 +68,7 @@ Instead, I created **bash installation scripts**, which are now used for setup a
 The backend follows a **Model → Service → Controller → Route** pattern.  
 This structure ensures clear separation of concerns:
 
-- **Models**: Define database structure and ORM logic
+- **Models**: Define database structure 
 - **Services**: Handle business logic and data processing
 - **Controllers**: Manage incoming requests and responses
 - **Routes**: Define API endpoints and connect them to controllers
